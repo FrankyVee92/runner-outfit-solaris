@@ -2,16 +2,55 @@
 // IMPORTAZIONI
 // ============================================================
 
-// Importiamo React, la libreria che ci permette di costruire interfacce web moderne.
-// Senza React, non potremmo usare JSX (la sintassi che mescola HTML e JavaScript).
-
-// useState è un "hook" di React: crea variabili "reattive" che quando cambiano
-// aggiornano automaticamente l'interfaccia. Esempio: quando sposti il cursore
-// della temperatura, React ridisegna i consigli in automatico.
+// Importiamo React e useState per gestire lo stato dell'app
 import React, { useState } from 'react';
 
-// Importiamo il file CSS che contiene tutti gli stili grafici dell'app
+// Importiamo il file CSS per gli stili grafici
 import './App.css';
+
+
+// ============================================================
+// OGGETTO: LINKS
+// ============================================================
+// Contiene tutti i link alle categorie di Solaris Sport,
+// divisi per genere (male/female) e per tipo di capo.
+//
+// È un oggetto JavaScript con due proprietà principali:
+//   LINKS.male   = link per le categorie uomo
+//   LINKS.female = link per le categorie donna
+//
+// Ogni proprietà interna è una stringa con l'URL della categoria.
+// Esempio: LINKS.male.termica = URL della sezione intimo uomo di Solaris
+// ============================================================
+const LINKS = {
+  male: {
+    termica:      'https://www.solarissport.com/collections/abbigliamento-uomo-intimo',
+    maglia:       'https://www.solarissport.com/collections/abbigliamento-uomo-maglie',
+    antivento:    'https://www.solarissport.com/collections/abbigliamento-uomo-giacche',
+    leggins:      'https://www.solarissport.com/collections/abbigliamento-uomo-leggings',
+    calzini:      'https://www.solarissport.com/collections/accessori-uomo-calze',
+    guanti:       'https://www.solarissport.com/collections/accessori-uomo-guanti',
+    cappello:     'https://www.solarissport.com/collections/accessori-uomo-cappelli',
+    felpa:        'https://www.solarissport.com/collections/abbigliamento-uomo-felpe',
+    shorts:       'https://www.solarissport.com/collections/abbigliamento-uomo-pantaloni',
+    impermeabile: 'https://www.solarissport.com/collections/abbigliamento-uomo-giacche',
+    scaldacollo:  'https://www.solarissport.com/collections/accessori-uomo-altro',
+  },
+  female: {
+    termica:      'https://www.solarissport.com/collections/abbigliamento-donna-intimo',
+    maglia:       'https://www.solarissport.com/collections/abbigliamento-donna-maglie',
+    antivento:    'https://www.solarissport.com/collections/abbigliamento-donna-giacche',
+    leggins:      'https://www.solarissport.com/collections/abbigliamento-donna-leggings',
+    calzini:      'https://www.solarissport.com/collections/accessori-donna-calze',
+    guanti:       'https://www.solarissport.com/collections/accessori-donna-guanti',
+    cappello:     'https://www.solarissport.com/collections/abbigliamento-donna-cappelli',
+    felpa:        'https://www.solarissport.com/collections/abbigliamento-donna-felpe',
+    shorts:       'https://www.solarissport.com/collections/abbigliamento-donna-pantaloni',
+    impermeabile: 'https://www.solarissport.com/collections/abbigliamento-donna-giacche',
+    top:          'https://www.solarissport.com/collections/abbigliamento-donna-intimo',
+    scaldacollo:  'https://www.solarissport.com/collections/accessori-donna-altro',
+  }
+};
 
 
 // ============================================================
@@ -43,7 +82,8 @@ function windChill(t, v) {
 // FUNZIONE: computeOutfit
 // ============================================================
 // Il "cervello" dell'app. Riceve tutti i dati inseriti dall'utente
-// e restituisce la lista dei capi da indossare e le note.
+// e restituisce la lista dei capi da indossare con i relativi link
+// alle categorie di Solaris Sport, e le note aggiuntive.
 //
 // Parametri:
 //   temp        = temperatura aria in °C
@@ -56,7 +96,7 @@ function windChill(t, v) {
 //   gender      = sesso: 'male', 'female'
 //
 // Restituisce un oggetto con:
-//   items     = array di capi da indossare (icona + testo)
+//   items     = array di capi (icona + testo + url Solaris)
 //   notes     = array di consigli aggiuntivi
 //   perceived = temperatura percepita durante la corsa
 //   wc        = temperatura percepita con il solo wind chill
@@ -66,33 +106,35 @@ function computeOutfit(temp, wind, humidity, duration, sensitivity, intensity, s
   // PASSO 1: calcoliamo il wind chill (quanto freddo fa con il vento)
   const wc = windChill(temp, wind);
 
-  // PASSO 2: calcoliamo gli "offset", cioè le correzioni alla temperatura
-  // in base alle caratteristiche personali e dell'allenamento.
-  // Offset negativo = fa più freddo | Offset positivo = fa meno freddo
+  // PASSO 2: calcoliamo gli "offset", cioè le correzioni alla temperatura.
+  // L'operatore ternario "condizione ? valore_se_vero : valore_se_falso"
+  // è un if/else compatto su una sola riga.
 
   // Sensibilità al freddo:
-  // La sintassi "condizione ? valore_se_vero : valore_se_falso" si chiama
-  // "operatore ternario": è un if/else compatto su una sola riga.
   // Freddoloso = -3°C (veste più caldo), Calorifero = +3°C (veste più leggero)
   const sensOffset = sensitivity === 'cold' ? -3 : sensitivity === 'warm' ? +3 : 0;
 
   // Intensità allenamento:
-  // Veloce = +4°C (produce molto calore), Lento = -2°C (produce poco calore)
-  // Ripetute con pause equivale a medio: nelle pause il calore si azzera
-  // "||" significa "oppure": la condizione è vera se è 'medium' OPPURE 'intervals'
+  // Veloce = +4°C, Medio o ripetute = 0°C, Lento = -2°C
+  // "||" significa "oppure"
   const intOffset = intensity === 'fast' ? +4 : intensity === 'medium' || intensity === 'intervals' ? 0 : -2;
 
-  // Durata: oltre 90 minuti il corpo si scalda progressivamente (-1°C)
+  // Durata: oltre 90 minuti il corpo si scalda progressivamente
   const durOffset = duration >= 90 ? -1 : 0;
 
   // PASSO 3: temperatura effettiva percepita durante la corsa
-  // = wind chill + tutti gli offset calcolati sopra
   const perceived = wc + sensOffset + intOffset + durOffset;
 
-  // PASSO 4: array vuoti da riempire con i risultati.
-  // Un array è una lista ordinata — come una lista della spesa.
-  // "const" significa che la variabile non può essere riassegnata,
-  // ma possiamo comunque aggiungere elementi con .push()
+  // PASSO 4: prendiamo i link giusti in base al genere.
+  // "L" è una scorciatoia per non scrivere LINKS[gender] ogni volta.
+  // LINKS['male'] o LINKS['female'] restituisce l'oggetto con i link del genere scelto.
+  const L = LINKS[gender];
+
+  // Array vuoti da riempire con i risultati.
+  // Ogni elemento di "items" avrà tre proprietà:
+  //   icon  = emoji del capo
+  //   label = nome del capo
+  //   url   = link alla categoria Solaris corrispondente
   const items = [];
   const notes = [];
 
@@ -100,82 +142,81 @@ function computeOutfit(temp, wind, humidity, duration, sensitivity, intensity, s
   // ============================================================
   // PASSO 5: LOGICA ABBIGLIAMENTO
   // Scegliamo i capi in base alla temperatura percepita.
-  // .push() aggiunge un elemento in fondo all'array.
-  // Ogni elemento è un oggetto: { icon: 'emoji', label: 'testo' }
+  // Ogni capo ha ora anche un "url" che punta alla categoria
+  // giusta su Solaris Sport (diverso per uomo e donna).
   // ============================================================
 
   if (perceived <= 0) {
     // FREDDO INTENSO: tutti gli strati, protezione completa
-    items.push({ icon: '🧥', label: 'Termica invernale (intima)' });
-    items.push({ icon: '👕', label: 'Maglia maniche lunghe' });
-    items.push({ icon: '🌬️', label: 'Giacca antivento' });
-    items.push({ icon: '👖', label: 'Leggins invernali' });
-    items.push({ icon: '🧦', label: 'Calzettoni tecnici' });
-    items.push({ icon: '🧤', label: 'Guanti' });
-    items.push({ icon: '🧣', label: 'Scaldacollo' });
-    items.push({ icon: '🧢', label: 'Berretto / fascia orecchie' });
+    items.push({ icon: '🧥', label: 'Termica invernale (intima)', url: L.termica });
+    items.push({ icon: '👕', label: 'Maglia maniche lunghe', url: L.maglia });
+    items.push({ icon: '🌬️', label: 'Giacca antivento', url: L.antivento });
+    items.push({ icon: '👖', label: 'Leggins invernali', url: L.leggins });
+    items.push({ icon: '🧦', label: 'Calzettoni tecnici', url: L.calzini });
+    items.push({ icon: '🧤', label: 'Guanti', url: L.guanti });
+    items.push({ icon: '🧣', label: 'Scaldacollo', url: L.scaldacollo });
+    items.push({ icon: '🧢', label: 'Berretto / fascia orecchie', url: L.cappello });
     if (perceived <= -8) notes.push('Con freddo estremo valuta una doppia termica o gilet isolante.');
 
   } else if (perceived <= 7) {
     // FREDDO MODERATO: termica leggera, guanti consigliati
-    items.push({ icon: '🧥', label: 'Termica leggera' });
-    items.push({ icon: '👕', label: 'Maglia maniche lunghe' });
+    items.push({ icon: '🧥', label: 'Termica leggera', url: L.termica });
+    items.push({ icon: '👕', label: 'Maglia maniche lunghe', url: L.maglia });
     // Antivento solo con vento forte (oltre 20 km/h)
-    if (wind > 20) items.push({ icon: '🌬️', label: 'Antivento leggero' });
-    items.push({ icon: '👖', label: 'Leggins lunghi' });
-    items.push({ icon: '🧦', label: 'Calzini tecnici' });
-    items.push({ icon: '🧤', label: 'Guanti leggeri' });
+    if (wind > 20) items.push({ icon: '🌬️', label: 'Antivento leggero', url: L.antivento });
+    items.push({ icon: '👖', label: 'Leggins lunghi', url: L.leggins });
+    items.push({ icon: '🧦', label: 'Calzini tecnici', url: L.calzini });
+    items.push({ icon: '🧤', label: 'Guanti leggeri', url: L.guanti });
     // Fascia orecchie solo sotto i 4°C
-    if (perceived < 4) items.push({ icon: '🧢', label: 'Fascia orecchie' });
+    if (perceived < 4) items.push({ icon: '🧢', label: 'Fascia orecchie', url: L.cappello });
 
   } else if (perceived <= 14) {
     // FRESCO: maglia lunga e leggins, guanti solo se abbastanza fresco
-    items.push({ icon: '👕', label: 'Maglia maniche lunghe' });
+    items.push({ icon: '👕', label: 'Maglia maniche lunghe', url: L.maglia });
     // Antivento con vento moderato (oltre 15 km/h)
-    if (wind > 15) items.push({ icon: '🌬️', label: 'Antivento leggero' });
-    items.push({ icon: '👖', label: 'Leggins 3/4 o lunghi' });
-    items.push({ icon: '🧦', label: 'Calzini tecnici' });
+    if (wind > 15) items.push({ icon: '🌬️', label: 'Antivento leggero', url: L.antivento });
+    items.push({ icon: '👖', label: 'Leggins 3/4 o lunghi', url: L.leggins });
+    items.push({ icon: '🧦', label: 'Calzini tecnici', url: L.calzini });
     // Guanti solo sotto gli 11°C
-    if (perceived < 11) items.push({ icon: '🧤', label: 'Guanti sottili' });
+    if (perceived < 11) items.push({ icon: '🧤', label: 'Guanti sottili', url: L.guanti });
 
   } else if (perceived <= 20) {
     // MITE: abbigliamento leggero, top per le donne
     if (gender === 'female') {
-      items.push({ icon: '👙', label: 'Top sportivo' });
+      items.push({ icon: '👙', label: 'Top sportivo', url: L.top });
       // "!==" significa "diverso da"
       // Se non è calorifero, aggiunge la maglia sopra il top
-      if (sensitivity !== 'warm') items.push({ icon: '👕', label: 'Maglia maniche corte' });
+      if (sensitivity !== 'warm') items.push({ icon: '👕', label: 'Maglia maniche corte', url: L.maglia });
     } else {
-      items.push({ icon: '👕', label: 'Maglia maniche corte' });
+      items.push({ icon: '👕', label: 'Maglia maniche corte', url: L.maglia });
     }
     // Chi va piano aggiunge una felpa per non raffreddarsi
-    if (intensity === 'slow') items.push({ icon: '🧥', label: 'Felpa leggera' });
-    items.push({ icon: '🩳', label: 'Shorts o leggins corti' });
-    items.push({ icon: '🧦', label: 'Calzini tecnici' });
+    if (intensity === 'slow') items.push({ icon: '🧥', label: 'Felpa leggera', url: L.felpa });
+    items.push({ icon: '🩳', label: 'Shorts o leggins corti', url: L.shorts });
+    items.push({ icon: '🧦', label: 'Calzini tecnici', url: L.calzini });
 
   } else {
     // CALDO: abbigliamento minimo
     if (gender === 'female') {
-      items.push({ icon: '👙', label: 'Top sportivo' });
+      items.push({ icon: '👙', label: 'Top sportivo', url: L.top });
       // Solo le donne freddolose aggiungono la maglia col caldo
-      if (sensitivity === 'cold') items.push({ icon: '👕', label: 'Maglia tecnica maniche corte' });
+      if (sensitivity === 'cold') items.push({ icon: '👕', label: 'Maglia tecnica maniche corte', url: L.maglia });
     } else {
-      items.push({ icon: '👕', label: 'Maglia tecnica maniche corte' });
+      items.push({ icon: '👕', label: 'Maglia tecnica maniche corte', url: L.maglia });
     }
-    items.push({ icon: '🩳', label: 'Shorts' });
-    items.push({ icon: '🧦', label: 'Calzini corti' });
+    items.push({ icon: '🩳', label: 'Shorts', url: L.shorts });
+    items.push({ icon: '🧦', label: 'Calzini corti', url: L.calzini });
     if (perceived >= 27) notes.push('Caldo intenso: porta acqua e corri nelle ore più fresche.');
   }
 
 
   // ============================================================
   // PASSO 6: NOTE AGGIUNTIVE
-  // Indipendentemente dalla temperatura, verifichiamo altre condizioni
   // ============================================================
 
   // Pioggia: aggiungiamo impermeabile e nota
   if (sky === 'rain') {
-    items.push({ icon: '🌧️', label: 'Giacca impermeabile' });
+    items.push({ icon: '🌧️', label: 'Giacca impermeabile', url: L.impermeabile });
     notes.push('Con la pioggia aggiungi sempre uno strato impermeabile sopra.');
   }
 
@@ -207,7 +248,6 @@ function computeOutfit(temp, wind, humidity, duration, sensitivity, intensity, s
   // PASSO 7: restituiamo i risultati.
   // La sintassi { items, notes, perceived, wc } è una scorciatoia JavaScript
   // equivalente a { items: items, notes: notes, perceived: perceived, wc: wc }
-  // Si chiama "object shorthand" o "destructuring assignment"
   return { items, notes, perceived, wc };
 }
 
@@ -215,10 +255,10 @@ function computeOutfit(temp, wind, humidity, duration, sensitivity, intensity, s
 // ============================================================
 // COMPONENTE: PillGroup
 // ============================================================
-// In React un "componente" è una funzione che restituisce interfaccia.
-// PillGroup mostra un gruppo di bottoni selezionabili (le "pillole").
+// Mostra un gruppo di bottoni selezionabili (le "pillole").
+// Usato per: Uomo/Donna, Freddoloso/Normale/Calorifero, ecc.
 //
-// Riceve queste "props" (proprietà passate dal componente padre):
+// Props ricevute:
 //   options  = array di opzioni, ognuna con { value, label }
 //   value    = valore attualmente selezionato
 //   onChange = funzione da chiamare quando si cambia selezione
@@ -226,9 +266,10 @@ function computeOutfit(temp, wind, humidity, duration, sensitivity, intensity, s
 function PillGroup({ options, value, onChange }) {
   return (
     <div className="pill-group">
-      {/* .map() itera sull'array e per ogni elemento restituisce JSX.
-          Funziona così: prende ogni elemento (o), lo passa alla funzione
-          freccia, e restituisce un array di elementi React da renderizzare. */}
+      {/* .map() itera sull'array e per ogni elemento restituisce un bottone.
+          "key" è richiesto da React per identificare ogni elemento nella lista.
+          La classe "active" viene aggiunta solo al bottone selezionato.
+          "===" significa "strettamente uguale a" in JavaScript. */}
       {options.map(o => (
         <button
           key={o.value}
@@ -238,15 +279,6 @@ function PillGroup({ options, value, onChange }) {
           {o.label}
         </button>
       ))}
-      {/* Spiegazione della riga className:
-          - Le backtick permettono stringhe con variabili dentro (template literals)
-          - La classe è sempre "pill", più "active" se questo è il bottone selezionato
-          - "===" significa "strettamente uguale a" in JavaScript
-          
-          Spiegazione di onClick:
-          - "() =>" è una funzione freccia, modo moderno per scrivere funzioni
-          - Quando si clicca, chiama onChange con il value di questa opzione
-          - Equivale a scrivere: function() { onChange(o.value) } */}
     </div>
   );
 }
@@ -258,7 +290,7 @@ function PillGroup({ options, value, onChange }) {
 // Mostra una riga con icona, etichetta, cursore scorrevole e valore.
 // Usato per temperatura, vento, umidità e durata.
 //
-// Riceve queste props:
+// Props ricevute:
 //   icon     = emoji a sinistra
 //   label    = testo descrittivo
 //   min/max  = limiti del cursore
@@ -276,11 +308,9 @@ function SliderRow({ icon, label, min, max, step, value, unit, onChange }) {
         min={min} max={max} step={step} value={value}
         onChange={e => onChange(Number(e.target.value))}
       />
-      {/* Spiegazione di onChange:
-          - "e" è l'evento del browser generato quando il cursore si sposta
-          - "e.target" è l'elemento HTML del cursore
-          - "e.target.value" è il nuovo valore, ma come stringa di testo
-          - Number(...) lo converte in numero per i calcoli matematici */}
+      {/* "e" è l'evento del browser generato quando il cursore si sposta.
+          "e.target.value" è il nuovo valore come stringa di testo.
+          Number(...) lo converte in numero per i calcoli matematici. */}
       <span className="val">{value}{unit}</span>
     </div>
   );
@@ -291,22 +321,16 @@ function SliderRow({ icon, label, min, max, step, value, unit, onChange }) {
 // COMPONENTE PRINCIPALE: App
 // ============================================================
 // Gestisce tutto lo stato dell'app e mostra l'interfaccia completa.
-// "export default" = questo è il componente principale del file,
-// quello importato e usato dagli altri file del progetto.
+// "export default" = questo è il componente principale del file.
 // ============================================================
 export default function App() {
 
   // ============================================================
   // STATO con useState
   // ============================================================
-  // useState(valoreIniziale) restituisce un array con due elementi:
-  //   1. La variabile con il valore attuale
-  //   2. La funzione per aggiornarlo
-  // Quando chiamiamo la funzione di aggiornamento, React ridisegna
-  // automaticamente l'interfaccia — non dobbiamo fare nulla manualmente.
-  //
-  // La sintassi [variabile, setVariabile] si chiama "array destructuring":
-  // estrae i due elementi dell'array in due variabili separate.
+  // useState(valoreIniziale) restituisce [variabile, funzionePerAggiornarla].
+  // Ogni aggiornamento ridisegna automaticamente l'interfaccia.
+  // La sintassi [variabile, setVariabile] si chiama "array destructuring".
   // ============================================================
 
   const [gender, setGender] = useState('male');
@@ -337,17 +361,17 @@ export default function App() {
   // ============================================================
   // CALCOLO CONSIGLI
   // ============================================================
-  // Ogni volta che uno stato cambia, React riesegue questa funzione
+  // Ogni volta che uno stato cambia React riesegue questa funzione
   // e ricalcola tutto con i valori aggiornati.
-  // Il "destructuring" { items, notes, perceived, wc } estrae le
-  // quattro proprietà restituite da computeOutfit in variabili separate.
+  // Il "destructuring" estrae le quattro proprietà restituite
+  // da computeOutfit in variabili separate.
   // ============================================================
   const { items, notes, perceived, wc } = computeOutfit(
     temp, wind, humidity, duration, sensitivity, intensity, sky, gender
   );
 
-  // Testo descrittivo della temperatura per il riquadro dei consigli
-  // Se wind chill e temperatura reale differiscono, mostriamo entrambi
+  // Testo descrittivo della temperatura per il riquadro dei consigli.
+  // Se wind chill e temperatura reale differiscono, mostriamo entrambi.
   const wcLabel = temp !== wc
     ? `percepita meteo ${wc}°C, effettiva corsa ~${perceived}°C`
     : `effettiva corsa ~${perceived}°C`;
@@ -360,7 +384,6 @@ export default function App() {
   //   - "className" invece di "class" (class è parola riservata in JS)
   //   - Espressioni JavaScript tra parentesi graffe { }
   //   - Commenti si scrivono {/* così */} dentro il JSX
-  //   - Un solo elemento radice (il div.app che contiene tutto)
   // ============================================================
   return (
     <div className="app">
@@ -378,8 +401,6 @@ export default function App() {
           value={gender}
           onChange={setGender}
         />
-        {/* onChange={setGender} significa: quando l'utente clicca,
-            chiama setGender con il nuovo valore e aggiorna lo stato */}
       </section>
 
       {/* Sezione sensibilità al freddo */}
@@ -411,7 +432,7 @@ export default function App() {
         />
       </section>
 
-      {/* Cursori per i parametri numerici — usano il componente SliderRow */}
+      {/* Cursori per i parametri numerici */}
       <SliderRow icon="⏱️" label="Durata uscita" min={15} max={180} step={5}
         value={duration} unit=" min" onChange={setDuration} />
 
@@ -445,25 +466,40 @@ export default function App() {
         <p className="advice-meta">Temperatura {temp}°C — {wcLabel}</p>
         <p className="section-label">Cosa indossare</p>
 
-        {/* .map() itera sull'array items e per ogni capo crea un elemento grafico.
-            "i" è l'indice numerico (0,1,2...) usato come key univoca per React */}
-        <div className="item-grid">
+        {/* Ogni capo è ora un tag <a> (link cliccabile) invece di un semplice <div>.
+            - href={item.url} = l'indirizzo a cui porta il click
+            - target="_blank" = apre il link in una nuova scheda del browser
+            - rel="noopener noreferrer" = misura di sicurezza consigliata
+              quando si apre un link in una nuova scheda */}
+      <div className="item-grid">
           {items.map((item, i) => (
-            <div key={i} className="item">
+            
+              <a key={i}
+              className="item"
+              href={item.url}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <span className="item-icon">{item.icon}</span>
               <span>{item.label}</span>
-            </div>
+              <span className="item-link">🛒</span>
+            </a>
           ))}
         </div>
 
-        {/* Mostriamo le note SOLO se l'array non è vuoto.
-            "notes.length > 0" è true se c'è almeno un elemento.
+        {/* Mostriamo le note solo se ce ne sono.
+            "notes.length > 0" è true se c'è almeno un elemento nell'array.
             "&&" in JSX = "se vero, mostra questo elemento" */}
         {notes.length > 0 && (
           <div className="notes">
             {notes.map((n, i) => <p key={i}>💡 {n}</p>)}
           </div>
         )}
+
+        {/* Badge Solaris in fondo al riquadro */}
+        <p className="solaris-badge">
+          Powered by <a href="https://www.solarissport.com" target="_blank" rel="noopener noreferrer">Solaris Sport</a>
+        </p>
       </div>
     </div>
   );
