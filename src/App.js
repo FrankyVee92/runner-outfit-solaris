@@ -186,9 +186,9 @@ function computeOutfit(temp, wind, humidity, duration, sensitivity, intensity, s
       items.push({ icon: '👙', label: 'Top sportivo', url: L.top });
       // "!==" significa "diverso da"
       // Se non è calorifero, aggiunge la maglia sopra il top
-      if (sensitivity !== 'warm') items.push({ icon: '👕', label: 'Maglia maniche corte', url: L.maglia });
+      if (sensitivity !== 'warm') items.push({ icon: '👕', label: 'Maglia tecnica maniche corte', url: L.maglia });
     } else {
-      items.push({ icon: '👕', label: 'Maglia maniche corte', url: L.maglia });
+      items.push({ icon: '👕', label: 'Maglia tecnica maniche corte', url: L.maglia });
     }
     // Chi va piano aggiunge una felpa per non raffreddarsi
     if (intensity === 'slow') items.push({ icon: '🧥', label: 'Felpa leggera', url: L.felpa });
