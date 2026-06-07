@@ -205,7 +205,7 @@ function computeOutfit(temp, wind, humidity, duration, sensitivity, intensity, s
       items.push({ icon: '👕', label: 'Maglia tecnica maniche corte', url: L.maglia });
     }
     items.push({ icon: '🩳', label: 'Shorts', url: L.shorts });
-    items.push({ icon: '🧦', label: 'Calzini corti', url: L.calzini });
+    items.push({ icon: '🧦', label: 'Calzini tecnici corti', url: L.calzini });
     if (perceived >= 27) notes.push('Caldo intenso: porta acqua e corri nelle ore più fresche.');
   }
 
