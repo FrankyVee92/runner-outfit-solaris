@@ -246,6 +246,92 @@ const PRODOTTI = {
 
 
 // ============================================================
+// *** AREA AGGIORNAMENTO SCARPE ***
+// ============================================================
+// Qui trovi le scarpe consigliate divise per genere e per
+// tipo di allenamento. La logica è:
+//   slow      = lento/rigenerativo → scarpe molto ammortizzate
+//   medium    = ritmo medio → scarpe reattive e versatili
+//   fast      = veloce → scarpe performanti leggere
+//   intervals = ripetute o gara → scarpe con piastra in carbonio
+//
+// Come aggiornare:
+//   Modifica nome e url dei prodotti senza toccare il resto.
+// ============================================================
+
+const SCARPE = {
+
+  // --------------------------------------------------------
+  // SCARPE UOMO
+  // --------------------------------------------------------
+  male: {
+
+    // Lento / rigenerativo — massima ammortizzazione per recupero
+    slow: [
+      { nome: 'Brooks Ghost 17', url: 'https://www.solarissport.com/products/1104421d-454' },
+      { nome: 'Asics Gel-Nimbus 27', url: 'https://www.solarissport.com/products/1011b958-006' },
+      { nome: 'New Balance 1080', url: 'https://www.solarissport.com/products/m1080-8mp' },
+    ],
+
+    // Medio — scarpe reattive e versatili per allenamenti quotidiani
+    medium: [
+      { nome: 'Asics Novablast 5', url: 'https://www.solarissport.com/products/1011b974-300' },
+      { nome: 'Hoka Mach 6', url: 'https://www.cisalfasport.it/it-it/hoka/scarpe-running-mach-6-m-S5881546.html' },
+      { nome: 'New Balance FuelCell Rebel V5', url: 'https://www.cisalfasport.it/it-it/new-balance/scarpe-running-fuelcell-rebel-v5-m-S5943593.html' },
+    ],
+
+    // Veloce — scarpe leggere e performanti per ritmi sostenuti
+    fast: [
+      { nome: 'Saucony Endorphin Speed 5', url: 'https://www.solarissport.com/products/s21007-285' },
+      { nome: 'Hoka Mach 7', url: 'https://www.cisalfasport.it/it-it/hoka/scarpe-running-mach-7-m-S5984553.html' },
+      { nome: 'Adidas SL Evo', url: 'https://www.solarissport.com/products/jp7149' },
+    ],
+
+    // Ripetute o gara — scarpe con piastra in carbonio per massima velocità
+    intervals: [
+      { nome: 'Saucony Endorphin Pro 5', url: 'https://www.cisalfasport.it/it-it/saucony/scarpe-running-endorphin-pro-5-m-S5992547.html' },
+      { nome: 'Adidas Adizero Adios Pro 4', url: 'https://www.cisalfasport.it/it-it/adidas/scarpe-running-adizero-adios-pro-4-m-S5958346%7CUNI%7C9.html' },
+      { nome: 'Asics Metaspeed Sky', url: 'https://www.cisalfasport.it/it-it/asics/scarpe-running-metaspeed-sky-tokyo-m-S5934864%7C300%7C9H.html' },
+    ],
+  },
+
+  // --------------------------------------------------------
+  // SCARPE DONNA
+  // --------------------------------------------------------
+  female: {
+
+    // Lento / rigenerativo — massima ammortizzazione per recupero
+    slow: [
+      { nome: 'Brooks Ghost 17', url: 'https://www.solarissport.com/products/1204311b-070' },
+      { nome: 'Asics Gel-Nimbus 27', url: 'https://www.solarissport.com/products/1012b753-300' },
+      { nome: 'New Balance 1080', url: 'https://www.solarissport.com/collections/scarpa-donna-running/products/w1080-815' },
+    ],
+
+    // Medio — scarpe reattive e versatili per allenamenti quotidiani
+    medium: [
+      { nome: 'Asics Novablast 5', url: 'https://www.solarissport.com/products/1012b765-400' },
+      { nome: 'Hoka Mach 6', url: 'https://www.cisalfasport.it/it-it/hoka/scarpe-running-mach-6-w-S5881558.html' },
+      { nome: 'New Balance FuelCell Rebel V5', url: 'https://www.cisalfasport.it/it-it/new-balance/scarpe-running-fuelcell-rebel-v5-w-S5944429.html' },
+    ],
+
+    // Veloce — scarpe leggere e performanti per ritmi sostenuti
+    fast: [
+      { nome: 'Saucony Endorphin Speed 5', url: 'https://www.solarissport.com/products/s11007-340' },
+      { nome: 'Hoka Mach 7', url: 'https://www.cisalfasport.it/it-it/hoka/scarpe-running-mach-7-w-S5984606.html' },
+      { nome: 'Adidas SL Evo', url: 'https://www.solarissport.com/products/jh6208' },
+    ],
+
+    // Ripetute o gara — scarpe con piastra in carbonio per massima velocità
+    intervals: [
+      { nome: 'Saucony Endorphin Pro 4', url: 'https://www.sportsshoes.com/it-it/product/sau5255/saucony-endorphin-pro-4-donna-scarpe-da-running' },
+      { nome: 'Adidas Adizero Adios Pro 4', url: 'https://top4running.it/p/adidas-adizero-adios-pro-4-running-shoe-women-js2580' },
+      { nome: 'Nike Vaporfly 4', url: 'https://www.cisalfasport.it/it-it/nike/scarpe-running-vaporfly-4-w-S5936574%7C503%7C6.html' },
+    ],
+  }
+};
+
+
+// ============================================================
 // FUNZIONE: windChill
 // ============================================================
 // Calcola la temperatura percepita tenendo conto del vento.
@@ -436,10 +522,15 @@ function computeOutfit(temp, wind, humidity, duration, sensitivity, intensity, s
     notes.push('Ripetute con pause: durante le soste il corpo si raffredda rapidamente, tieni un capo extra con te da indossare nelle pause.');
   }
 
-  // PASSO 7: restituiamo i risultati.
-  // La sintassi { items, notes, perceived, wc } è una scorciatoia JavaScript
-  // equivalente a { items: items, notes: notes, perceived: perceived, wc: wc }
-  return { items, notes, perceived, wc };
+  // PASSO 7: selezioniamo le scarpe consigliate in base
+  // all'intensità dell'allenamento e al genere.
+  // "intervals" usa le stesse scarpe sia per ripetute che per gara.
+  const scarpe = SCARPE[gender][intensity];
+
+  // PASSO 8: restituiamo i risultati.
+  // La sintassi { items, notes, perceived, wc, scarpe } è una scorciatoia JavaScript
+  // equivalente a { items: items, notes: notes, perceived: perceived, wc: wc, scarpe:scarpe }
+  return { items, notes, perceived, wc, scarpe };
 }
 
 
@@ -599,7 +690,7 @@ export default function App() {
   // Il "destructuring" estrae le quattro proprietà restituite
   // da computeOutfit in variabili separate.
   // ============================================================
-  const { items, notes, perceived, wc } = computeOutfit(
+  const { items, notes, perceived, wc, scarpe } = computeOutfit(
     temp, wind, humidity, duration, sensitivity, intensity, sky, gender
   );
 
@@ -619,7 +710,7 @@ export default function App() {
   // ============================================================
   return (
     <div className="app">
-      <h1>🏃 RunWear</h1>
+      <h1>🏃 Running Outfit & Shoes</h1>
       <p className="subtitle">Cosa indossare per la tua uscita</p>
 
       {/* Sezione sesso */}
@@ -642,7 +733,7 @@ export default function App() {
           options={[
             { value: 'cold', label: 'Freddoloso' },
             { value: 'normal', label: 'Normale' },
-            { value: 'warm', label: 'Calorifero' },
+            { value: 'warm', label: 'Caloroso' },
           ]}
           value={sensitivity}
           onChange={setSensitivity}
@@ -721,10 +812,25 @@ export default function App() {
           </div>
         )}
 
-        {/* Badge Solaris in fondo al riquadro */}
-        <p className="solaris-badge">
-          Powered by <a href="https://www.solarissport.com" target="_blank" rel="noopener noreferrer">Solaris Sport</a>
-        </p>
+    {/* Sezione scarpe consigliate in base all'intensità */}
+        <div className="shoes-section">
+          <p className="section-label">👟 Scarpe consigliate</p>
+          <div className="item-card">
+            <div className="item-products">
+              {scarpe.map((s, i) => (
+                  <a
+                  key={i}
+                  href={s.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="product-link"
+                >
+                  🛒 {s.nome}
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
