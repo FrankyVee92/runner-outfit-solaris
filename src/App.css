@@ -54,3 +54,56 @@ hr { border: none; border-top: 1px solid #f0f0f0; margin: 1.5rem 0; }
 
 .notes { margin-top: 12px; border-left: 3px solid #ddd; padding-left: 10px; }
 .notes p { font-size: 13px; color: #666; line-height: 1.6; margin-bottom: 4px; }
+
+.items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.item-card {
+  background: white;
+  border: 1px solid #eee;
+  border-radius: 10px;
+  padding: 12px;
+}
+
+.item-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.item-icon { font-size: 20px; }
+
+.item-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.item-products {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-left: 28px;
+}
+
+.product-link {
+  font-size: 13px;
+  color: #555;
+  text-decoration: none;
+  padding: 4px 8px;
+  border-radius: 6px;
+  border: 1px solid #eee;
+  background: #fafafa;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.product-link:hover {
+  background: #f0f0f0;
+  border-color: #ccc;
+  color: #1a1a1a;
+}
