@@ -4,11 +4,6 @@
   "description": "Scopri cosa indossare per la tua uscita di running in base alle condizioni meteo e al tuo allenamento",
   "icons": [
     {
-      "src": "favicon.ico",
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
-    },
-    {
       "src": "icon-512.png",
       "type": "image/png",
       "sizes": "512x512"
