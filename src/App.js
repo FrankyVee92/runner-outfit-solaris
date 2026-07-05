@@ -522,9 +522,9 @@ function computeOutfit(temp, wind, humidity, duration, sensitivity, intensity, s
   // invece di una semplice stringa. La proprietà "link" contiene l'url ambassador.
   if (intensity === 'fast' || intensity === 'intervals' || duration >= 60) {
     notes.push({ 
-      testo: '💊 Per questo allenamento considera un carbo/gel energetico', 
-      linkTesto: '→ Acquista qui con sconto ambassador',
-      linkUrl: 'https://vitastrong.it/it/carrello?action=show'
+      testo: '💊 Considera un carbo/gel energetico — usa il codice sconto FRANKY01', 
+      linkTesto: '→ Acquista qui',
+      linkUrl: 'https://vitastrong.it/it/endurance-energia/391-carbo-gel-21-8055774502917.html'
     });
   }
 
