@@ -518,10 +518,14 @@ function computeOutfit(temp, wind, humidity, duration, sensitivity, intensity, s
   }
 
   // Carbo/gel: consigliato per allenamenti veloci, ripetute o uscite lunghe (60+ minuti)
-  // La condizione usa "||" (oppure): si attiva se l'intensità è veloce/ripetute
-  // OPPURE se la durata è uguale o superiore a 60 minuti
+  // Questa nota è speciale — ha un link cliccabile, quindi usiamo un oggetto
+  // invece di una semplice stringa. La proprietà "link" contiene l'url ambassador.
   if (intensity === 'fast' || intensity === 'intervals' || duration >= 60) {
-    notes.push('💊 Per questo allenamento considera un carbo/gel energetico → acquista qui con sconto ambassador');
+    notes.push({ 
+      testo: '💊 Per questo allenamento considera un carbo/gel energetico', 
+      linkTesto: '→ Acquista qui con sconto ambassador',
+      linkUrl: 'https://vitastrong.it/it/carrello?action=show'
+    });
   }
 
   // Ripetute: consiglio valido solo quando non fa caldo
@@ -811,11 +815,29 @@ export default function App() {
         </div>
 
         {/* Mostriamo le note solo se ce ne sono.
-            "notes.length > 0" è true se c'è almeno un elemento nell'array.
-            "&&" in JSX = "se vero, mostra questo elemento" */}
+            Ogni nota può essere una semplice stringa oppure un oggetto
+            con testo + link. Controlliamo con "typeof" che tipo è:
+            - typeof n === 'string' → nota semplice, mostriamo solo il testo
+            - altrimenti → nota con link, mostriamo testo + link cliccabile */}
         {notes.length > 0 && (
           <div className="notes">
-            {notes.map((n, i) => <p key={i}>💡 {n}</p>)}
+            {notes.map((n, i) => (
+              <p key={i}>
+                💡 {typeof n === 'string' ? n : (
+                  <>
+                    {n.testo}{' '}
+                      <a
+                      href={n.linkUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="note-link"
+                    >
+                      {n.linkTesto}
+                    </a>
+                  </>
+                )}
+              </p>
+            ))}
           </div>
         )}
 

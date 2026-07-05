@@ -149,3 +149,14 @@ hr { border: none; border-top: 1px solid #f0f0f0; margin: 1.5rem 0; }
   border-color: #bbb;
   color: #1a1a1a;
 }
+
+.note-link {
+  color: #1a1a1a;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.note-link:hover {
+  color: #555;
+}
