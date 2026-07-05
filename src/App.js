@@ -517,6 +517,13 @@ function computeOutfit(temp, wind, humidity, duration, sensitivity, intensity, s
     notes.push('Uscita lunga: potresti scaldarti in corsa, valuta strati rimovibili.');
   }
 
+  // Carbo/gel: consigliato per allenamenti veloci, ripetute o uscite lunghe (60+ minuti)
+  // La condizione usa "||" (oppure): si attiva se l'intensità è veloce/ripetute
+  // OPPURE se la durata è uguale o superiore a 60 minuti
+  if (intensity === 'fast' || intensity === 'intervals' || duration >= 60) {
+    notes.push('💊 Per questo allenamento considera un carbo/gel energetico → acquista qui con sconto ambassador');
+  }
+
   // Ripetute: consiglio valido solo quando non fa caldo
   if (intensity === 'intervals' && perceived < 18) {
     notes.push('Ripetute con pause: durante le soste il corpo si raffredda rapidamente, tieni un capo extra con te da indossare nelle pause.');
@@ -830,6 +837,21 @@ export default function App() {
               ))}
             </div>
           </div>
+        </div>
+      </div>
+      {/* Firma e link social dell'autore */}
+      <div className="footer-signature">
+        <p className="powered-by">Powered by Francesco Verga</p>
+        <div className="social-links">
+          <a href="https://www.instagram.com/francesco.vergram?igsh=aW52M2JzYTNieHBz" target="_blank" rel="noopener noreferrer" className="social-link">
+            📸 Instagram
+          </a>
+          <a href="https://strava.app.link/rYt3d0hVw4b" target="_blank" rel="noopener noreferrer" className="social-link">
+            🏃 Strava
+          </a>
+          <a href="https://www.facebook.com/share/1Aai9ngM5B/" target="_blank" rel="noopener noreferrer" className="social-link">
+            👤 Facebook
+          </a>
         </div>
       </div>
     </div>
