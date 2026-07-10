@@ -344,6 +344,21 @@ const SCARPE = {
   }
 };
 
+// ============================================================
+// *** AREA AMBASSADOR ***
+// ============================================================
+// Contiene i dati degli ambassador con codice sconto e link social.
+// Per aggiungere un nuovo ambassador aggiungi un nuovo oggetto.
+// ============================================================
+
+const AMBASSADOR = {
+  fessura: {
+    nome: 'Stefano Massimi',
+    instagram: 'https://www.instagram.com/s.m.stefanomassimi?igsh=MTl1eWIzZThiM21vNA==',
+    codice: 'MASSIMI20',
+    brand: 'Fessura'
+  }
+};
 
 // ============================================================
 // FUNZIONE: windChill
@@ -652,8 +667,19 @@ function ItemCard({ icon, label, products }) {
           >
             <span>🛒 {p.nome}</span>
             {p.sconto && (
-              <span className="badge-sconto">🏷️ Usa il codice: {p.sconto}</span>
-            )}
+          <div className="ambassador-box">
+          <span className="badge-sconto">🏷️ Usa il codice: {p.sconto}</span>
+            <a
+            href={AMBASSADOR.fessura.instagram}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="ambassador-link"
+            onClick={e => e.stopPropagation()}
+          >
+      📸 Segui {AMBASSADOR.fessura.nome} su Instagram
+    </a>
+  </div>
+)}
           </a>
         ))}
       </div>
@@ -865,14 +891,26 @@ export default function App() {
                 >
                   <span>🛒 {s.nome}</span>
                   {s.sconto && (
+                  <div className="ambassador-box">
                     <span className="badge-sconto">🏷️ Usa il codice: {s.sconto}</span>
-                  )}
+                      <a
+                      href={AMBASSADOR.fessura.instagram}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="ambassador-link"
+                      onClick={e => e.stopPropagation()}
+                    >
+                      📸 Segui {AMBASSADOR.fessura.nome} su Instagram
+                    </a>
+                  </div>
+                )}
                 </a>
               ))}
             </div>
           </div>
         </div>
       </div>
+
       {/* Firma e link social dell'autore */}
       <div className="footer-signature">
         <p className="powered-by">Powered by Francesco Verga</p>

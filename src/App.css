@@ -182,3 +182,21 @@ hr { border: none; border-top: 1px solid #f0f0f0; margin: 1.5rem 0; }
   border-radius: 10px;
   vertical-align: middle;
 }
+
+.ambassador-box {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.ambassador-link {
+  font-size: 12px;
+  color: #1565C0;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.ambassador-link:hover {
+  text-decoration: underline;
+}
