@@ -160,3 +160,25 @@ hr { border: none; border-top: 1px solid #f0f0f0; margin: 1.5rem 0; }
 .note-link:hover {
   color: #555;
 }
+
+.product-link-ambassador {
+  border-color: #1565C0;
+  background: #f0f4ff;
+}
+
+.product-link-ambassador:hover {
+  background: #e0eaff;
+  border-color: #0D47A1;
+}
+
+.badge-sconto {
+  display: inline-block;
+  margin-left: 8px;
+  background: #1565C0;
+  color: white;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 10px;
+  vertical-align: middle;
+}

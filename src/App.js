@@ -99,6 +99,7 @@ const PRODOTTI = {
 
     // Maglia tecnica maniche corte — usata con temperature miti o calde
     maglia_corta: [
+      { nome: 'Fessura Shirt T-01', url: 'https://www.fessura.com/products/shirt-t-01', sconto: 'MASSIMI20' },
       { nome: 'Adidas Own The Run Tee', url: 'https://www.solarissport.com/products/hb7448' },
       { nome: 'Asics Icon SS Top', url: 'https://www.solarissport.com/products/2011b055-301' },
       { nome: 'New Balance Run T-Shirt', url: 'https://www.solarissport.com/products/mt41253-bk' },
@@ -107,6 +108,7 @@ const PRODOTTI = {
 
     // Pantaloncini corti — usati con caldo intenso (oltre 20°C percepiti)
     shorts: [
+      { nome: 'Fessura Kit304', url: 'https://www.fessura.com/products/kit304-6-26i-kit30401-0', sconto: 'MASSIMI20' },
       { nome: 'Adidas Designed 4 Running', url: 'https://www.solarissport.com/products/h58578' },
       { nome: 'Under Armour UA Run Anywhere Short', url: 'https://www.solarissport.com/products/1376504-0006' },
       { nome: 'Nike Dri-Fit Run Division', url: 'https://www.solarissport.com/products/dm4807-010' },
@@ -114,6 +116,7 @@ const PRODOTTI = {
 
     // Calzini tecnici corti — consigliati sempre
     calzini: [
+      { nome: 'Fessura Socks T-01', url: 'https://www.fessura.com/products/socks-t-01', sconto: 'MASSIMI20' },
       { nome: 'GM Run Training', url: 'https://www.solarissport.com/products/2404-09' },
       { nome: 'Asics Performance Run Sock Crew', url: 'https://www.solarissport.com/products/3013b002-750' },
       { nome: 'BV Sport Socquette Scrone Evo', url: 'https://www.solarissport.com/products/208-002' },
@@ -204,6 +207,7 @@ const PRODOTTI = {
 
     // Maglia tecnica maniche corte — usata con temperature miti o calde
     maglia_corta: [
+      { nome: 'Fessura Shirt T-01', url: 'https://www.fessura.com/products/shirt-t-01', sconto: 'MASSIMI20' },
       { nome: 'New Balance Sports Essentials T-Shirt', url: 'https://www.solarissport.com/collections/abbigliamento-donna-t-shirt/products/wt41222-afg' },
       { nome: 'Under Armour UA Velociti Shortsleeve', url: 'https://www.solarissport.com/collections/abbigliamento-donna-t-shirt/products/6009540-0824' },
       { nome: 'Under Armour Tech Knockout Tank', url: 'https://www.solarissport.com/collections/abbigliamento-donna-t-shirt/products/1389851-0498' },
@@ -211,6 +215,7 @@ const PRODOTTI = {
 
     // Pantaloncini corti — usati con caldo intenso (oltre 20°C percepiti)
     shorts: [
+      { nome: 'Fessura Kit304', url: 'https://www.fessura.com/products/kit304-6-26i-kit30401-0', sconto: 'MASSIMI20' },
       { nome: 'New Balance Sport Essentials 2-in-1 Short', url: 'https://www.solarissport.com/collections/abbigliamento-donna-pantaloni/products/ws41225-bk' },
       { nome: 'Under Armour UA Fly By 3in Shorts', url: 'https://www.solarissport.com/collections/abbigliamento-donna-pantaloni/products/1382438-0520' },
       { nome: 'Asics Nagino Run Adjustable 4in Short', url: 'https://www.solarissport.com/collections/abbigliamento-donna-pantaloni/products/2012d141-500' },
@@ -218,6 +223,7 @@ const PRODOTTI = {
 
     // Calzini tecnici corti — consigliati sempre
     calzini: [
+      { nome: 'Fessura Socks T-01', url: 'https://www.fessura.com/products/socks-t-01', sconto: 'MASSIMI20' },
       { nome: 'GM Run Training', url: 'https://www.solarissport.com/products/2404-09' },
       { nome: 'BV Sport Socquette Californie', url: 'https://www.solarissport.com/products/292-039' },
       { nome: 'BV Sport Socquette Scrone Evo', url: 'https://www.solarissport.com/products/208-002' },
@@ -268,6 +274,7 @@ const SCARPE = {
 
     // Lento / rigenerativo — massima ammortizzazione per recupero
     slow: [
+      { nome: 'Fessura Speed 01 Jacquard Navy', url: 'https://www.fessura.com/products/speed-01-jacquard-navy', sconto: 'MASSIMI20' },
       { nome: 'Brooks Ghost 17', url: 'https://www.solarissport.com/products/1104421d-454' },
       { nome: 'Asics Gel-Nimbus 27', url: 'https://www.solarissport.com/products/1011b958-006' },
       { nome: 'New Balance 1080', url: 'https://www.solarissport.com/products/m1080-8mp' },
@@ -275,6 +282,7 @@ const SCARPE = {
 
     // Medio — scarpe reattive e versatili per allenamenti quotidiani
     medium: [
+      { nome: 'Fessura Speed 05 Violet', url: 'https://www.fessura.com/products/speed-05-violet', sconto: 'MASSIMI20' },
       { nome: 'Asics Novablast 5', url: 'https://www.solarissport.com/products/1011b974-300' },
       { nome: 'Hoka Mach 6', url: 'https://www.cisalfasport.it/it-it/hoka/scarpe-running-mach-6-m-S5881546.html' },
       { nome: 'New Balance FuelCell Rebel V5', url: 'https://www.cisalfasport.it/it-it/new-balance/scarpe-running-fuelcell-rebel-v5-m-S5943593.html' },
@@ -282,6 +290,7 @@ const SCARPE = {
 
     // Veloce — scarpe leggere e performanti per ritmi sostenuti
     fast: [
+      { nome: 'Fessura Race 3 Violet', url: 'https://www.fessura.com/products/race-3-violet', sconto: 'MASSIMI20' },
       { nome: 'Saucony Endorphin Speed 5', url: 'https://www.solarissport.com/products/s21007-285' },
       { nome: 'Hoka Mach 7', url: 'https://www.cisalfasport.it/it-it/hoka/scarpe-running-mach-7-m-S5984553.html' },
       { nome: 'Adidas SL Evo', url: 'https://www.solarissport.com/products/jp7149' },
@@ -289,6 +298,7 @@ const SCARPE = {
 
     // Ripetute o gara — scarpe con piastra in carbonio per massima velocità
     intervals: [
+      { nome: 'Fessura Race 01 Team', url: 'https://www.fessura.com/products/race-01-team', sconto: 'MASSIMI20' },
       { nome: 'Saucony Endorphin Pro 5', url: 'https://www.cisalfasport.it/it-it/saucony/scarpe-running-endorphin-pro-5-m-S5992547.html' },
       { nome: 'Adidas Adizero Adios Pro 4', url: 'https://www.cisalfasport.it/it-it/adidas/scarpe-running-adizero-adios-pro-4-m-S5958346%7CUNI%7C9.html' },
       { nome: 'Asics Metaspeed Sky', url: 'https://www.cisalfasport.it/it-it/asics/scarpe-running-metaspeed-sky-tokyo-m-S5934864%7C300%7C9H.html' },
@@ -302,28 +312,32 @@ const SCARPE = {
 
     // Lento / rigenerativo — massima ammortizzazione per recupero
     slow: [
-      { nome: 'Brooks Ghost 17', url: 'https://www.solarissport.com/products/1204311b-070' },
+      { nome: 'Fessura Speed 01 Jacquard Navy', url: 'https://www.fessura.com/products/speed-01-jacquard-navy', sconto: 'MASSIMI20' },
+      { nome: 'Brooks Ghost 17', url: 'https://www.solarissport.com/products/1104421d-454' },
       { nome: 'Asics Gel-Nimbus 27', url: 'https://www.solarissport.com/products/1012b753-300' },
       { nome: 'New Balance 1080', url: 'https://www.solarissport.com/collections/scarpa-donna-running/products/w1080-815' },
     ],
 
     // Medio — scarpe reattive e versatili per allenamenti quotidiani
     medium: [
-      { nome: 'Asics Novablast 5', url: 'https://www.solarissport.com/products/1012b765-400' },
+      { nome: 'Fessura Speed 05 Violet', url: 'https://www.fessura.com/products/speed-05-violet', sconto: 'MASSIMI20' },
+      { nome: 'Asics Novablast 5', url: 'https://www.solarissport.com/products/1011b974-300' },
       { nome: 'Hoka Mach 6', url: 'https://www.cisalfasport.it/it-it/hoka/scarpe-running-mach-6-w-S5881558.html' },
       { nome: 'New Balance FuelCell Rebel V5', url: 'https://www.cisalfasport.it/it-it/new-balance/scarpe-running-fuelcell-rebel-v5-w-S5944429.html' },
     ],
 
     // Veloce — scarpe leggere e performanti per ritmi sostenuti
     fast: [
-      { nome: 'Saucony Endorphin Speed 5', url: 'https://www.solarissport.com/products/s11007-340' },
+      { nome: 'Fessura Race 3 Violet', url: 'https://www.fessura.com/products/race-3-violet', sconto: 'MASSIMI20' },
+      { nome: 'Saucony Endorphin Speed 5', url: 'https://www.solarissport.com/products/s21007-285' },
       { nome: 'Hoka Mach 7', url: 'https://www.cisalfasport.it/it-it/hoka/scarpe-running-mach-7-w-S5984606.html' },
       { nome: 'Adidas SL Evo', url: 'https://www.solarissport.com/products/jh6208' },
     ],
 
     // Ripetute o gara — scarpe con piastra in carbonio per massima velocità
     intervals: [
-      { nome: 'Saucony Endorphin Pro 4', url: 'https://www.sportsshoes.com/it-it/product/sau5255/saucony-endorphin-pro-4-donna-scarpe-da-running' },
+      { nome: 'Fessura Race 01 Team', url: 'https://www.fessura.com/products/race-01-team', sconto: 'MASSIMI20' },
+      { nome: 'Saucony Endorphin Pro 5', url: 'https://www.cisalfasport.it/it-it/saucony/scarpe-running-endorphin-pro-5-m-S5992547.html' },
       { nome: 'Adidas Adizero Adios Pro 4', url: 'https://top4running.it/p/adidas-adizero-adios-pro-4-running-shoe-women-js2580' },
       { nome: 'Nike Vaporfly 4', url: 'https://www.cisalfasport.it/it-it/nike/scarpe-running-vaporfly-4-w-S5936574%7C503%7C6.html' },
     ],
@@ -623,28 +637,23 @@ function SliderRow({ icon, label, min, max, step, value, unit, onChange }) {
 function ItemCard({ icon, label, products }) {
   return (
     <div className="item-card">
-
-      {/* Intestazione del capo con icona e nome */}
       <div className="item-header">
         <span className="item-icon">{icon}</span>
         <span className="item-label">{label}</span>
       </div>
-
-      {/* Lista dei prodotti specifici — ognuno è un link cliccabile.
-          .map() itera sull'array products e per ogni prodotto crea un link.
-          - href={p.url} = indirizzo del prodotto su Solaris
-          - target="_blank" = apre in una nuova scheda del browser
-          - rel="noopener noreferrer" = misura di sicurezza per link esterni */}
       <div className="item-products">
         {products.map((p, i) => (
-            <a
+          <a
             key={i}
             href={p.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="product-link"
+            className={`product-link ${p.sconto ? 'product-link-ambassador' : ''}`}
           >
-            🛒 {p.nome}
+            <span>🛒 {p.nome}</span>
+            {p.sconto && (
+              <span className="badge-sconto">🏷️ Usa il codice: {p.sconto}</span>
+            )}
           </a>
         ))}
       </div>
@@ -847,14 +856,17 @@ export default function App() {
           <div className="item-card">
             <div className="item-products">
               {scarpe.map((s, i) => (
-                  <a
+                <a
                   key={i}
                   href={s.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="product-link"
+                  className={`product-link ${s.sconto ? 'product-link-ambassador' : ''}`}
                 >
-                  🛒 {s.nome}
+                  <span>🛒 {s.nome}</span>
+                  {s.sconto && (
+                    <span className="badge-sconto">🏷️ Usa il codice: {s.sconto}</span>
+                  )}
                 </a>
               ))}
             </div>
