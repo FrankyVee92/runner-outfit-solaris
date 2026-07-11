@@ -703,29 +703,14 @@ export default function App() {
   // Ogni aggiornamento ridisegna automaticamente l'interfaccia.
   // ============================================================
 
-  const [gender, setGender] = useState('male');
-  // 'male' o 'female' — valore iniziale: 'male'
-
-  const [sensitivity, setSensitivity] = useState('normal');
-  // 'cold', 'normal' o 'warm' — valore iniziale: 'normal'
-
-  const [intensity, setIntensity] = useState('medium');
-  // 'slow', 'medium', 'fast', 'intervals' — valore iniziale: 'medium'
-
-  const [duration, setDuration] = useState(45);
-  // durata in minuti — valore iniziale: 45
-
-  const [temp, setTemp] = useState(5);
-  // temperatura in °C — valore iniziale: 5
-
-  const [wind, setWind] = useState(12);
-  // vento in km/h — valore iniziale: 12
-
-  const [humidity, setHumidity] = useState(60);
-  // umidità in % — valore iniziale: 60
-
-  const [sky, setSky] = useState('cloudy');
-  // 'cloudy', 'sunny', 'rain' — valore iniziale: 'cloudy'
+  const [gender, setGender] = useState(() => localStorage.getItem('rc_gender') || 'male');
+  const [sensitivity, setSensitivity] = useState(() => localStorage.getItem('rc_sensitivity') || 'normal');
+  const [intensity, setIntensity] = useState(() => localStorage.getItem('rc_intensity') || 'medium');
+  const [duration, setDuration] = useState(() => Number(localStorage.getItem('rc_duration')) || 45);
+  const [temp, setTemp] = useState(() => Number(localStorage.getItem('rc_temp')) || 5);
+  const [wind, setWind] = useState(() => Number(localStorage.getItem('rc_wind')) || 12);
+  const [humidity, setHumidity] = useState(() => Number(localStorage.getItem('rc_humidity')) || 60);
+  const [sky, setSky] = useState(() => localStorage.getItem('rc_sky') || 'cloudy');
 
 
   // ============================================================
@@ -736,6 +721,15 @@ export default function App() {
   // Il "destructuring" estrae le quattro proprietà restituite
   // da computeOutfit in variabili separate.
   // ============================================================
+    // Salva i parametri nel localStorage ogni volta che cambiano
+  React.useEffect(() => { localStorage.setItem('rc_gender', gender); }, [gender]);
+  React.useEffect(() => { localStorage.setItem('rc_sensitivity', sensitivity); }, [sensitivity]);
+  React.useEffect(() => { localStorage.setItem('rc_intensity', intensity); }, [intensity]);
+  React.useEffect(() => { localStorage.setItem('rc_duration', duration); }, [duration]);
+  React.useEffect(() => { localStorage.setItem('rc_temp', temp); }, [temp]);
+  React.useEffect(() => { localStorage.setItem('rc_wind', wind); }, [wind]);
+  React.useEffect(() => { localStorage.setItem('rc_humidity', humidity); }, [humidity]);
+  React.useEffect(() => { localStorage.setItem('rc_sky', sky); }, [sky]);
   const { items, notes, perceived, wc, scarpe } = computeOutfit(
     temp, wind, humidity, duration, sensitivity, intensity, sky, gender
   );
