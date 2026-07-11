@@ -31,9 +31,9 @@ section { margin-bottom: 1.5rem; }
 .pill.active { background: #1a1a1a; color: white; border-color: #1a1a1a; }
 
 .row-input { display: flex; align-items: center; gap: 12px; margin-bottom: 1.25rem; }
-.row-input label { font-size: 14px; color: #555; min-width: 160px; }
+.row-input label { font-size: 13px; color: #555; min-width: 120px; max-width: 120px; }
 .row-input input[type=range] { flex: 1; }
-.val { font-size: 14px; font-weight: 500; min-width: 56px; text-align: right; }
+.val { font-size: 13px; font-weight: 500; min-width: 48px; text-align: right; }
 
 hr { border: none; border-top: 1px solid #f0f0f0; margin: 1.5rem 0; }
 
@@ -199,4 +199,11 @@ hr { border: none; border-top: 1px solid #f0f0f0; margin: 1.5rem 0; }
 
 .ambassador-link:hover {
   text-decoration: underline;
+}
+
+@media (max-width: 480px) {
+  .row-input { gap: 6px; }
+  .row-input label { font-size: 12px; min-width: 100px; max-width: 100px; }
+  .val { font-size: 12px; min-width: 42px; }
+  .app { padding: 1rem; }
 }
