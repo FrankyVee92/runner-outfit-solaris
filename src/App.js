@@ -10,6 +10,8 @@ import React, { useState } from 'react';
 // Importiamo il file CSS per gli stili grafici
 import './App.css';
 
+// Importiamo la gestione dei PDF
+import jsPDF from 'jspdf';
 
 // ============================================================
 // *** AREA AGGIORNAMENTO PRODOTTI ***
@@ -359,6 +361,181 @@ const AMBASSADOR = {
     brand: 'Fessura'
   }
 };
+
+
+// ============================================================
+// *** AREA TEAM DI ESPERTI ***
+// ============================================================
+// Contiene i dati dei professionisti consigliati dall'app.
+//
+// Come aggiungere un nuovo professionista:
+//   1. Aggiungi un nuovo oggetto dentro TEAM (es. fisioterapista, preparatore)
+//   2. Copia la struttura di "nutrizionista" e modifica i valori
+//   3. Aggiungi la sezione corrispondente nel JSX in fondo al file
+//
+// Come aggiornare un professionista esistente:
+//   Modifica direttamente i valori qui sotto senza toccare
+//   nulla nel resto del codice.
+//
+// Struttura di ogni professionista:
+//   nome            = nome completo con titolo (es. Dott.)
+//   ruolo           = specializzazione e struttura di appartenenza
+//   instagram_personale = link al profilo Instagram personale
+//   instagram_team  = link al profilo Instagram della struttura
+//   sito            = link al sito web personale
+//   telefono        = numero per prenotare (senza spazi)
+//   codice_sconto   = codice da mostrare nel coupon PDF
+//   sconto          = percentuale di sconto (es. '10%')
+// ============================================================
+
+const TEAM = {
+
+  // Nutrizionista — Manuel Salvadori, Team Performance
+  // Visita a Civitanova e in Abruzzo
+  // Coupon sconto del 10% generabile direttamente dall'app
+  nutrizionista: {
+    nome: 'Dott. Manuel Salvadori',
+    ruolo: 'Nutrizionista — Team Performance',
+    instagram_personale: 'https://www.instagram.com/dr.perf0rmance',
+    instagram_team: 'https://www.instagram.com/team.performance.it',
+    sito: 'https://www.manuelsalvadori.it',
+    // Numero dell'assistente per prenotare gli appuntamenti
+    telefono: '3512605230',
+    // Codice da presentare in sede per ottenere lo sconto
+    codice_sconto: 'FrancescoVergaRunChoice',
+    // Percentuale di sconto applicata sulla visita
+    sconto: '10%',
+  }
+
+};
+
+
+// ============================================================
+// FUNZIONE: generaCouponPDF
+// ============================================================
+// Genera e scarica automaticamente un coupon PDF con i dati
+// del nutrizionista e il codice sconto.
+//
+// Usa la libreria jsPDF che abbiamo installato con npm.
+// jsPDF funziona creando un documento virtuale e aggiungendo
+// elementi (testo, immagini, linee) con coordinate x,y in mm.
+//
+// Il documento è in formato A5 orizzontale (148x210mm) —
+// più compatto di un A4, perfetto per un coupon.
+// ============================================================
+function generaCouponPDF() {
+
+  // Creiamo un nuovo documento PDF
+  // 'l' = landscape (orizzontale), 'mm' = millimetri, 'a5' = formato A5
+  const doc = new jsPDF('l', 'mm', 'a5');
+
+  // Dimensioni del documento
+  const w = doc.internal.pageSize.getWidth();   // larghezza in mm
+  const h = doc.internal.pageSize.getHeight();  // altezza in mm
+
+  // Sfondo bianco
+  doc.setFillColor(255, 255, 255);
+  doc.rect(0, 0, w, h, 'F');
+
+  // Bordo tratteggiato esterno — simula il bordo del coupon
+  doc.setDrawColor(180, 180, 180);
+  doc.setLineWidth(0.3);
+  doc.setLineDashPattern([3, 2], 0);
+  doc.rect(5, 5, w - 10, h - 10);
+  doc.setLineDashPattern([], 0);
+
+  // Striscia blu in cima
+  doc.setFillColor(21, 101, 192);
+  doc.rect(5, 5, w - 10, 8, 'F');
+
+  // Carichiamo i loghi come immagini base64
+  // Usiamo un oggetto Image per caricare i file dalla cartella public
+  const logoPerf = new Image();
+  logoPerf.src = '/logo-performance.png';
+  
+  const logoRC = new Image();
+  logoRC.src = '/logo-runchoice.png';
+
+  // Aspettiamo che entrambe le immagini siano caricate
+  // prima di generare il PDF
+  Promise.all([
+    new Promise(resolve => { logoPerf.onload = resolve; logoPerf.onerror = resolve; }),
+    new Promise(resolve => { logoRC.onload = resolve; logoRC.onerror = resolve; })
+  ]).then(() => {
+
+    // Logo Performance Center a sinistra
+    try { doc.addImage(logoPerf, 'PNG', 8, 15, 100, 25); } catch(e) {}
+
+    // Logo RunChoice a destra
+    try { doc.addImage(logoRC, 'PNG', w - 35, 18, 25, 25); } catch(e) {}
+
+    // Titolo coupon
+    doc.setFontSize(10);
+    doc.setTextColor(100, 100, 100);
+    doc.setFont('helvetica', 'normal');
+    doc.text('COUPON SCONTO ESCLUSIVO', w / 2, 48, { align: 'center' });
+
+    // Percentuale sconto — grande e in blu
+    doc.setFontSize(36);
+    doc.setTextColor(21, 101, 192);
+    doc.setFont('helvetica', 'bold');
+    doc.text(TEAM.nutrizionista.sconto, w / 2, 62, { align: 'center' });
+
+    // Testo sotto la percentuale
+    doc.setFontSize(11);
+    doc.setTextColor(50, 50, 50);
+    doc.setFont('helvetica', 'normal');
+    doc.text('sulla tua visita con il Team Performance', w / 2, 70, { align: 'center' });
+
+    // Box codice sconto
+    doc.setFillColor(245, 245, 245);
+    doc.setDrawColor(200, 200, 200);
+    doc.setLineWidth(0.3);
+    doc.roundedRect(20, 75, w - 40, 18, 3, 3, 'FD');
+
+    // Etichetta codice
+    doc.setFontSize(8);
+    doc.setTextColor(120, 120, 120);
+    doc.text('CODICE SCONTO', w / 2, 81, { align: 'center' });
+
+    // Codice sconto in blu
+    doc.setFontSize(13);
+    doc.setTextColor(21, 101, 192);
+    doc.setFont('helvetica', 'bold');
+    doc.text(TEAM.nutrizionista.codice_sconto, w / 2, 89, { align: 'center' });
+
+    // Linea divisoria tratteggiata
+    doc.setDrawColor(200, 200, 200);
+    doc.setLineWidth(0.3);
+    doc.setLineDashPattern([2, 2], 0);
+    doc.line(10, 98, w - 10, 98);
+    doc.setLineDashPattern([], 0);
+
+    // Nome nutrizionista
+    doc.setFontSize(10);
+    doc.setTextColor(50, 50, 50);
+    doc.setFont('helvetica', 'bold');
+    doc.text(TEAM.nutrizionista.nome + ' — Nutrizionista', 12, 105);
+
+    // Contatti
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(100, 100, 100);
+    doc.text('Tel: ' + TEAM.nutrizionista.telefono, 12, 112);
+
+    doc.setTextColor(21, 101, 192);
+    doc.text('@dr.perf0rmance', 50, 112);
+    doc.text('@team.performance.it', 95, 112);
+
+    // Footer
+    doc.setFontSize(8);
+    doc.setTextColor(180, 180, 180);
+    doc.text('Coupon generato da RunChoice', w / 2, h - 8, { align: 'center' });
+
+    // Scarichiamo il PDF con nome file specifico
+    doc.save('coupon-performance-center.pdf');
+  });
+}
 
 // ============================================================
 // FUNZIONE: windChill
@@ -905,6 +1082,48 @@ export default function App() {
         </div>
       </div>
 
+      {/* Sezione Team di Esperti */}
+      <div className="team-section">
+        <p className="section-label">👨‍⚕️ Il nostro team di esperti</p>
+
+        <div className="team-card">
+
+          {/* Logo e nome del professionista */}
+          <div className="team-header">
+            <img src="/logo-performance.png" alt="Performance Center" className="team-logo" />
+            <div>
+              <p className="team-nome">{TEAM.nutrizionista.nome}</p>
+              <p className="team-ruolo">{TEAM.nutrizionista.ruolo}</p>
+            </div>
+          </div>
+
+          {/* Link social e contatti */}
+          <div className="team-contacts">
+            <a href={TEAM.nutrizionista.instagram_personale} target="_blank" rel="noopener noreferrer" className="team-link">
+              📸 @dr.perf0rmance
+            </a>
+            <a href={TEAM.nutrizionista.instagram_team} target="_blank" rel="noopener noreferrer" className="team-link">
+              📸 @team.performance.it
+            </a>
+            <a href={`tel:${TEAM.nutrizionista.telefono}`} className="team-link">
+              📞 351 260 5230
+            </a>
+            <a href={TEAM.nutrizionista.sito} target="_blank" rel="noopener noreferrer" className="team-link">
+              🌐 manuelsalvadori.it
+            </a>
+          </div>
+
+          {/* Frase coupon e pulsante */}
+          <p className="team-coupon-text">
+            Prenota la tua visita con il Team Performance e risparmia il 10%!
+          </p>
+          <button className="coupon-button" onClick={generaCouponPDF}>
+            🎟️ Scarica il tuo coupon sconto
+          </button>
+
+        </div>
+      </div>
+      
       {/* Firma e link social dell'autore */}
       <div className="footer-signature">
         <p className="powered-by">Powered by Francesco Verga</p>

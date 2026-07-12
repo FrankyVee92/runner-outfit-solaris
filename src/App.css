@@ -207,3 +207,85 @@ hr { border: none; border-top: 1px solid #f0f0f0; margin: 1.5rem 0; }
   .val { font-size: 12px; min-width: 42px; }
   .app { padding: 1rem; }
 }
+
+.team-section {
+  margin-top: 2rem;
+}
+
+.team-card {
+  background: var(--surface-1, #f9f9f9);
+  border-radius: 12px;
+  border: 1px solid #eee;
+  padding: 1.25rem;
+}
+
+.team-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 1rem;
+}
+
+.team-logo {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+}
+
+.team-nome {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0 0 4px;
+}
+
+.team-ruolo {
+  font-size: 13px;
+  color: #666;
+  margin: 0;
+}
+
+.team-contacts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 1rem;
+}
+
+.team-link {
+  font-size: 13px;
+  color: #1565C0;
+  text-decoration: none;
+  padding: 4px 10px;
+  border-radius: 20px;
+  border: 1px solid #1565C0;
+  background: #f0f4ff;
+}
+
+.team-link:hover {
+  background: #e0eaff;
+}
+
+.team-coupon-text {
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+.coupon-button {
+  width: 100%;
+  padding: 12px;
+  background: #1565C0;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.coupon-button:hover {
+  background: #0D47A1;
+}
