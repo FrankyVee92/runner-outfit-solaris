@@ -405,6 +405,20 @@ const TEAM = {
     codice_sconto: 'FrancescoVergaRunChoice',
     // Percentuale di sconto applicata sulla visita
     sconto: '10%',
+  },
+
+  // Nutrizionista — Luca Quagliatini, Team Performance
+  // Stesso team di Manuel, stessa segreteria per appuntamenti
+  // Coupon sconto del 10% generabile direttamente dall'app
+  nutrizionista2: {
+    nome: 'Dott. Luca Quagliatini',
+    ruolo: 'Nutrizionista — Team Performance',
+    instagram_personale: 'https://www.instagram.com/dr.lucaquagliatini?igsh=MTF5eTJzc3JrcmlxcQ==',
+    instagram_team: 'https://www.instagram.com/team.performance.it',
+    sito: 'https://www.nutridoc.it/nutrizionista/luca-quagliatini',
+    telefono: '3512605230',
+    codice_sconto: 'FrancescoVergaRunChoice',
+    sconto: '10%',
   }
 
 };
@@ -534,6 +548,103 @@ function generaCouponPDF() {
 
     // Scarichiamo il PDF con nome file specifico
     doc.save('coupon-performance-center.pdf');
+  });
+}
+
+// ============================================================
+// FUNZIONE: generaCouponPDFLuca
+// ============================================================
+// Genera il coupon PDF per Luca Quagliatini.
+// Stessa struttura grafica di generaCouponPDF ma con i dati
+// di Luca — nome, instagram personale e sito diversi.
+// Il resto (logo, codice sconto, telefono) è uguale a Manuel.
+// ============================================================
+function generaCouponPDFLuca() {
+
+  const doc = new jsPDF('l', 'mm', 'a5');
+  const w = doc.internal.pageSize.getWidth();
+  const h = doc.internal.pageSize.getHeight();
+
+  doc.setFillColor(255, 255, 255);
+  doc.rect(0, 0, w, h, 'F');
+
+  doc.setDrawColor(180, 180, 180);
+  doc.setLineWidth(0.3);
+  doc.setLineDashPattern([3, 2], 0);
+  doc.rect(5, 5, w - 10, h - 10);
+  doc.setLineDashPattern([], 0);
+
+  doc.setFillColor(21, 101, 192);
+  doc.rect(5, 5, w - 10, 8, 'F');
+
+  const logoPerf = new Image();
+  logoPerf.src = '/logo-performance.png';
+
+  const logoRC = new Image();
+  logoRC.src = '/logo-runchoice.png';
+
+  Promise.all([
+    new Promise(resolve => { logoPerf.onload = resolve; logoPerf.onerror = resolve; }),
+    new Promise(resolve => { logoRC.onload = resolve; logoRC.onerror = resolve; })
+  ]).then(() => {
+
+    try { doc.addImage(logoPerf, 'PNG', 8, 15, 100, 25); } catch(e) {}
+    try { doc.addImage(logoRC, 'PNG', w - 35, 18, 25, 25); } catch(e) {}
+
+    doc.setFontSize(10);
+    doc.setTextColor(100, 100, 100);
+    doc.setFont('helvetica', 'normal');
+    doc.text('COUPON SCONTO ESCLUSIVO', w / 2, 48, { align: 'center' });
+
+    doc.setFontSize(36);
+    doc.setTextColor(21, 101, 192);
+    doc.setFont('helvetica', 'bold');
+    doc.text(TEAM.nutrizionista2.sconto, w / 2, 62, { align: 'center' });
+
+    doc.setFontSize(11);
+    doc.setTextColor(50, 50, 50);
+    doc.setFont('helvetica', 'normal');
+    doc.text('sulla tua visita con il Team Performance', w / 2, 70, { align: 'center' });
+
+    doc.setFillColor(245, 245, 245);
+    doc.setDrawColor(200, 200, 200);
+    doc.setLineWidth(0.3);
+    doc.roundedRect(20, 75, w - 40, 18, 3, 3, 'FD');
+
+    doc.setFontSize(8);
+    doc.setTextColor(120, 120, 120);
+    doc.text('CODICE SCONTO', w / 2, 81, { align: 'center' });
+
+    doc.setFontSize(13);
+    doc.setTextColor(21, 101, 192);
+    doc.setFont('helvetica', 'bold');
+    doc.text(TEAM.nutrizionista2.codice_sconto, w / 2, 89, { align: 'center' });
+
+    doc.setDrawColor(200, 200, 200);
+    doc.setLineWidth(0.3);
+    doc.setLineDashPattern([2, 2], 0);
+    doc.line(10, 98, w - 10, 98);
+    doc.setLineDashPattern([], 0);
+
+    doc.setFontSize(10);
+    doc.setTextColor(50, 50, 50);
+    doc.setFont('helvetica', 'bold');
+    doc.text(TEAM.nutrizionista2.nome + ' — Nutrizionista', 12, 105);
+
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(100, 100, 100);
+    doc.text('Tel: ' + TEAM.nutrizionista2.telefono, 12, 112);
+
+    doc.setTextColor(21, 101, 192);
+    doc.text('@dr.lucaquagliatini', 50, 112);
+    doc.text('@team.performance.it', 95, 112);
+
+    doc.setFontSize(8);
+    doc.setTextColor(180, 180, 180);
+    doc.text('Coupon generato da RunChoice', w / 2, h - 8, { align: 'center' });
+
+    doc.save('coupon-luca-quagliatini.pdf');
   });
 }
 
@@ -1124,6 +1235,44 @@ export default function App() {
         </div>
       </div>
       
+      {/* Sezione Luca Quagliatini */}
+      <div className="team-card" style={{marginTop: '1rem'}}>
+
+        {/* Logo e nome */}
+        <div className="team-header">
+          <img src="/logo-performance.png" alt="Performance Center" className="team-logo" />
+          <div>
+            <p className="team-nome">{TEAM.nutrizionista2.nome}</p>
+            <p className="team-ruolo">{TEAM.nutrizionista2.ruolo}</p>
+          </div>
+        </div>
+
+        {/* Link social e contatti */}
+        <div className="team-contacts">
+          <a href={TEAM.nutrizionista2.instagram_personale} target="_blank" rel="noopener noreferrer" className="team-link">
+            📸 @dr.lucaquagliatini
+          </a>
+          <a href={TEAM.nutrizionista2.instagram_team} target="_blank" rel="noopener noreferrer" className="team-link">
+            📸 @team.performance.it
+          </a>
+          <a href={`tel:${TEAM.nutrizionista2.telefono}`} className="team-link">
+            📞 351 260 5230
+          </a>
+          <a href={TEAM.nutrizionista2.sito} target="_blank" rel="noopener noreferrer" className="team-link">
+            🌐 nutridoc.it
+          </a>
+        </div>
+
+        {/* Frase coupon e pulsante */}
+        <p className="team-coupon-text">
+          Prenota la tua visita con il Team Performance e risparmia il 10%!
+        </p>
+        <button className="coupon-button" onClick={generaCouponPDFLuca}>
+          🎟️ Scarica il tuo coupon sconto
+        </button>
+
+      </div>
+
       {/* Firma e link social dell'autore */}
       <div className="footer-signature">
         <p className="powered-by">Powered by Francesco Verga</p>
