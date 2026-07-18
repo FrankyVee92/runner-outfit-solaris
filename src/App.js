@@ -911,19 +911,28 @@ function PillGroup({ options, value, onChange }) {
 function SliderRow({ icon, label, min, max, step, value, unit, onChange }) {
   return (
     <div className="row-input">
+
+      {/* Etichetta con icona e testo descrittivo */}
       <label>{icon} {label}</label>
+
+      {/* Cursore scorrevole.
+          "e" è l'evento del browser generato quando il cursore si sposta.
+          "e.target.value" è il nuovo valore come stringa di testo.
+          Number(...) lo converte in numero per i calcoli matematici. */}
       <input
         type="range"
         min={min} max={max} step={step} value={value}
         onChange={e => onChange(Number(e.target.value))}
       />
-      {/* "e" è l'evento del browser generato quando il cursore si sposta.
-          "e.target.value" è il nuovo valore come stringa di testo.
-          Number(...) lo converte in numero per i calcoli matematici. */}
+
+      {/* Mostra il valore attuale seguito dall'unità di misura.
+          Es. "5°C" oppure "12 km/h" */}
       <span className="val">{value}{unit}</span>
+
     </div>
   );
 }
+
 
 
 // ============================================================
