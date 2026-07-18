@@ -1041,6 +1041,15 @@ export default function App() {
       <h1>🏃 Running Outfit & Shoes</h1>
       <p className="subtitle">Cosa indossare per la tua uscita</p>
 
+      {/* Banner installazione PWA — visibile solo se l'app è aperta dal browser
+      e non è già installata come PWA sulla schermata home */}
+      {!window.matchMedia('(display-mode: standalone)').matches && (
+      <div className="install-banner">
+      <span>📲 Per la migliore esperienza installa l'app!</span>
+      <span className="install-hint">Tocca il menu del browser → "Aggiungi a schermata Home"</span>
+    </div>
+    )}
+
       {/* Sezione sesso */}
       <section>
         <p className="section-label">Sei</p>
