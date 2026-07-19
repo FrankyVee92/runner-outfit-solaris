@@ -648,6 +648,7 @@ function generaCouponPDFLuca() {
   });
 }
 
+
 // ============================================================
 // FUNZIONE: windChill
 // ============================================================
@@ -1008,6 +1009,21 @@ export default function App() {
   const [wind, setWind] = useState(() => Number(localStorage.getItem('rc_wind')) || 12);
   const [humidity, setHumidity] = useState(() => Number(localStorage.getItem('rc_humidity')) || 60);
   const [sky, setSky] = useState(() => localStorage.getItem('rc_sky') || 'cloudy');
+  // Ora di uscita per il running — usata per le previsioni meteo orarie
+  // Valore iniziale: 7 (le 7 di mattina)
+  // Salvata nel localStorage così l'utente non la reimposta ogni volta
+  const [oraUscita, setOraUscita] = useState(() => Number(localStorage.getItem('rc_ora')) || 7);
+
+  // Stato per il caricamento del meteo — true mentre aspettiamo la risposta
+  // di Open-Meteo, false quando i dati sono arrivati o in caso di errore
+  const [loadingMeteo, setLoadingMeteo] = useState(false);
+
+  // Messaggio di errore geolocalizzazione — null se tutto ok,
+  // stringa con il messaggio di errore in caso di problemi
+  const [erroreMeteo, setErroreMeteo] = useState(null);
+
+  // Nome della città rilevata dal GPS — null se non ancora rilevata
+  const [citta, setCitta] = useState(null);
 
 
   // ============================================================
@@ -1027,6 +1043,121 @@ export default function App() {
   React.useEffect(() => { localStorage.setItem('rc_wind', wind); }, [wind]);
   React.useEffect(() => { localStorage.setItem('rc_humidity', humidity); }, [humidity]);
   React.useEffect(() => { localStorage.setItem('rc_sky', sky); }, [sky]);
+  React.useEffect(() => { localStorage.setItem('rc_ora', oraUscita); }, [oraUscita]);
+
+// ============================================================
+// FUNZIONE: rilevaMeteoautomatico
+// ============================================================
+// Questa funzione fa tre cose in sequenza:
+//
+// 1. Chiede al browser la posizione GPS dell'utente
+//    Il browser mostra una finestra di conferma — l'utente
+//    deve cliccare "Consenti" per procedere.
+//
+// 2. Invia le coordinate a Open-Meteo (servizio meteo gratuito)
+//    con la richiesta delle previsioni orarie per oggi.
+//    Open-Meteo restituisce temperatura, vento e umidità
+//    per ogni ora del giorno nella posizione dell'utente.
+//
+// 3. Aggiorna automaticamente i cursori dell'app con i valori
+//    meteo dell'ora scelta dall'utente per uscire a correre.
+//
+// In caso di errore (GPS negato, nessuna connessione, ecc.)
+// mostra un messaggio di errore all'utente.
+//
+// Open-Meteo API: https://open-meteo.com/
+// È gratuita, non richiede registrazione né API key.
+// ============================================================
+async function rilevaMeteomatico() {
+
+  // Impostiamo loadingMeteo a true per mostrare il messaggio di caricamento
+  // e azzeriamo eventuali errori precedenti
+  setLoadingMeteo(true);
+  setErroreMeteo(null);
+
+  // Verifichiamo che il browser supporti la geolocalizzazione
+  // Non tutti i browser o dispositivi ce l'hanno
+  if (!navigator.geolocation) {
+    setErroreMeteo('Il tuo browser non supporta la geolocalizzazione.');
+    setLoadingMeteo(false);
+    return;
+  }
+
+  // Chiediamo la posizione GPS all'utente
+  // getCurrentPosition è asincrona — il browser mostra una finestra
+  // di conferma e poi chiama la funzione di callback con le coordinate
+  navigator.geolocation.getCurrentPosition(
+
+    // Callback di successo — viene chiamata quando l'utente accetta
+    // e il GPS ha trovato la posizione
+    async (position) => {
+      try {
+
+        // Estraiamo latitudine e longitudine dalla posizione GPS
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+
+        // Costruiamo l'URL per Open-Meteo con i parametri che ci servono:
+        // - hourly: i dati che vogliamo ora per ora
+        // - temperature_2m: temperatura a 2 metri dal suolo in °C
+        // - windspeed_10m: velocità del vento a 10m in km/h
+        // - relativehumidity_2m: umidità relativa in %
+        // - timezone: auto per usare il fuso orario locale
+        const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=temperature_2m,relativehumidity_2m,windspeed_10m&timezone=auto&forecast_days=1`;
+
+        // Chiamiamo l'API di Open-Meteo con fetch
+        // "await" aspetta che la risposta arrivi prima di continuare
+        const response = await fetch(url);
+
+        // Convertiamo la risposta in JSON (formato dati strutturato)
+        const data = await response.json();
+
+        // Open-Meteo restituisce un array con 24 valori — uno per ogni ora.
+        // Usiamo l'ora scelta dall'utente come indice dell'array.
+        // Es. se oraUscita = 7, prendiamo data.hourly.temperature_2m[7]
+        const ora = oraUscita;
+        const temperatura = Math.round(data.hourly.temperature_2m[ora]);
+        const vento = Math.round(data.hourly.windspeed_10m[ora]);
+        const umidita = Math.round(data.hourly.relativehumidity_2m[ora]);
+
+        // Chiamiamo l'API di geocoding inverso di Open-Meteo
+        // per convertire le coordinate GPS in nome della città
+        // "geocoding inverso" = da coordinate a nome del luogo
+        const geoUrl = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`;
+        const geoResponse = await fetch(geoUrl);
+        const geoData = await geoResponse.json();
+
+        // Estraiamo il nome della città dalla risposta
+        // Proviamo prima city, poi town, poi village, poi county
+        const nomeCitta = geoData.address.city || geoData.address.town || geoData.address.village || geoData.address.county || 'Posizione rilevata';
+        setCitta(nomeCitta);
+
+        // Aggiorniamo i cursori dell'app con i valori meteo recuperati
+        // React ridisegnerà automaticamente l'interfaccia con i nuovi valori
+        setTemp(temperatura);
+        setWind(vento);
+        setHumidity(umidita);
+
+        // Nascostiamo il messaggio di caricamento
+        setLoadingMeteo(false);
+
+      } catch (error) {
+        // Se qualcosa va storto (es. nessuna connessione internet)
+        // mostriamo un messaggio di errore all'utente
+        setErroreMeteo('Errore nel recupero del meteo. Controlla la connessione.');
+        setLoadingMeteo(false);
+      }
+    },
+
+    // Callback di errore — viene chiamata se l'utente nega il permesso GPS
+    // o se c'è un problema con la geolocalizzazione
+    (error) => {
+      setErroreMeteo('Posizione non disponibile. Controlla i permessi GPS.');
+      setLoadingMeteo(false);
+    }
+  );
+}
+
   const { items, notes, perceived, wc, scarpe } = computeOutfit(
     temp, wind, humidity, duration, sensitivity, intensity, sky, gender
   );
@@ -1106,6 +1237,62 @@ export default function App() {
         value={duration} unit=" min" onChange={setDuration} />
 
       <hr />
+
+      {/* Sezione meteo automatico
+          Permette all'utente di scegliere l'ora di uscita e
+          rilevare automaticamente le condizioni meteo tramite GPS */}
+      <section>
+        <p className="section-label">🌤️ Meteo automatico</p>
+
+        {/* Selettore ora di uscita — l'utente sceglie a che ora vuole correre
+            Le opzioni vanno dalle 5 alle 22 con step di 1 ora */}
+        <div className="ora-uscita">
+          <label className="ora-label">A che ora esci a correre?</label>
+          <select
+            className="ora-select"
+            value={oraUscita}
+            onChange={e => setOraUscita(Number(e.target.value))}
+          >
+            {/* Generiamo le opzioni da 5 a 22 — orari ragionevoli per correre
+                Array.from crea un array di 18 elementi (da 5 a 22)
+                e per ognuno creiamo un'opzione con l'ora formattata */}
+            {Array.from({ length: 18 }, (_, i) => i + 5).map(ora => (
+              <option key={ora} value={ora}>
+                {ora}:00
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Pulsante per rilevare il meteo automaticamente tramite GPS
+            Mentre carica mostra un messaggio di attesa
+            onClick chiama la funzione rilevaMeteomatico che abbiamo definito sopra */}
+        <button
+          className="meteo-button"
+          onClick={rilevaMeteomatico}
+          disabled={loadingMeteo}
+        >
+          {/* Se sta caricando mostriamo un messaggio diverso
+              L'operatore ternario "condizione ? se_vero : se_falso"
+              cambia il testo del pulsante in base allo stato */}
+          {loadingMeteo ? '⏳ Rilevamento in corso...' : '📍 Rileva meteo automatico'}
+        </button>
+
+        {/* Messaggio di errore — visibile solo se erroreMeteo non è null
+            "&&" in JSX = "se vero, mostra questo elemento" */}
+        {erroreMeteo && (
+          <p className="meteo-errore">⚠️ {erroreMeteo}</p>
+        )}
+
+        {/* Messaggio di successo con città rilevata
+            Mostra l'ora e la città dove è stato rilevato il meteo */}
+        {!loadingMeteo && !erroreMeteo && temp !== 5 && (
+          <p className="meteo-successo">
+            ✅ Meteo aggiornato per le {oraUscita}:00 a {citta || 'posizione rilevata'}!
+          </p>
+        )}
+
+      </section>
 
       <SliderRow icon="🌡️" label="Temperatura aria" min={-15} max={30} step={1}
         value={temp} unit="°C" onChange={setTemp} />
