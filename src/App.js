@@ -419,6 +419,23 @@ const TEAM = {
     telefono: '3512605230',
     codice_sconto: 'FrancescoVergaRunChoice',
     sconto: '10%',
+  },
+
+  // Osteopata e Preparatore Atletico — Luca Antonelli, A-Team Running Club
+  // Atleta e professionista della performance sportiva
+  // Coupon sconto del 10% generabile direttamente dall'app
+  osteopata: {
+    nome: 'Luca Antonelli',
+    ruolo: 'Osteopata & Preparatore Atletico — A-Team Running Club',
+    instagram_personale: 'https://www.instagram.com/yourosteorunner_?igsh=amxja2M5dXZsYTVq',
+    // Link Instagram del team A-Team Running Club
+    instagram_team: 'https://www.instagram.com/a_team_runningclub?igsh=Z25wMnN2OGw4bXd3',
+    sito: 'https://a-teamcoaching.it/',
+    // Numero diretto di Luca per prenotare consulenze
+    telefono: '3881846001',
+    // Stesso codice sconto dei nutrizionisti
+    codice_sconto: 'FrancescoVergaRunChoice',
+    sconto: '10%',
   }
 
 };
@@ -645,6 +662,122 @@ function generaCouponPDFLuca() {
     doc.text('Coupon generato da RunChoice', w / 2, h - 8, { align: 'center' });
 
     doc.save('coupon-luca-quagliatini.pdf');
+  });
+}
+
+// ============================================================
+// FUNZIONE: generaCouponPDFAteam
+// ============================================================
+// Genera il coupon PDF per Luca Antonelli dell'A-Team Running Club.
+// Stessa struttura grafica delle altre funzioni coupon ma con:
+// - Logo A-Team invece del logo Performance Center
+// - Dati di Luca Antonelli (nome, ruolo, instagram, telefono)
+// Il codice sconto è lo stesso degli altri professionisti.
+// ============================================================
+function generaCouponPDFAteam() {
+
+  const doc = new jsPDF('l', 'mm', 'a5');
+  const w = doc.internal.pageSize.getWidth();
+  const h = doc.internal.pageSize.getHeight();
+
+  // Sfondo bianco
+  doc.setFillColor(255, 255, 255);
+  doc.rect(0, 0, w, h, 'F');
+
+  // Bordo tratteggiato esterno
+  doc.setDrawColor(180, 180, 180);
+  doc.setLineWidth(0.3);
+  doc.setLineDashPattern([3, 2], 0);
+  doc.rect(5, 5, w - 10, h - 10);
+  doc.setLineDashPattern([], 0);
+
+  // Striscia arancione in cima — colore A-Team
+  doc.setFillColor(255, 107, 0);
+  doc.rect(5, 5, w - 10, 8, 'F');
+
+  // Carichiamo i loghi
+  const logoAteam = new Image();
+  logoAteam.src = '/logo-ateam.png';
+
+  const logoRC = new Image();
+  logoRC.src = '/logo-runchoice.png';
+
+  Promise.all([
+    new Promise(resolve => { logoAteam.onload = resolve; logoAteam.onerror = resolve; }),
+    new Promise(resolve => { logoRC.onload = resolve; logoRC.onerror = resolve; })
+  ]).then(() => {
+
+    // Logo A-Team a sinistra
+    try { doc.addImage(logoAteam, 'PNG', 8, 14, 35, 35); } catch(e) {}
+
+    // Logo RunChoice a destra
+    try { doc.addImage(logoRC, 'PNG', w - 35, 18, 25, 25); } catch(e) {}
+
+    // Titolo coupon
+    doc.setFontSize(10);
+    doc.setTextColor(100, 100, 100);
+    doc.setFont('helvetica', 'normal');
+    doc.text('COUPON SCONTO ESCLUSIVO', w / 2, 48, { align: 'center' });
+
+    // Percentuale sconto
+    doc.setFontSize(36);
+    doc.setTextColor(255, 107, 0);
+    doc.setFont('helvetica', 'bold');
+    doc.text(TEAM.osteopata.sconto, w / 2, 62, { align: 'center' });
+
+    // Testo sotto la percentuale
+    doc.setFontSize(11);
+    doc.setTextColor(50, 50, 50);
+    doc.setFont('helvetica', 'normal');
+    doc.text('sulla tua consulenza con A-Team Running Club', w / 2, 70, { align: 'center' });
+
+    // Box codice sconto
+    doc.setFillColor(245, 245, 245);
+    doc.setDrawColor(200, 200, 200);
+    doc.setLineWidth(0.3);
+    doc.roundedRect(20, 75, w - 40, 18, 3, 3, 'FD');
+
+    // Etichetta codice
+    doc.setFontSize(8);
+    doc.setTextColor(120, 120, 120);
+    doc.text('CODICE SCONTO', w / 2, 81, { align: 'center' });
+
+    // Codice sconto in arancione
+    doc.setFontSize(13);
+    doc.setTextColor(255, 107, 0);
+    doc.setFont('helvetica', 'bold');
+    doc.text(TEAM.osteopata.codice_sconto, w / 2, 89, { align: 'center' });
+
+    // Linea divisoria tratteggiata
+    doc.setDrawColor(200, 200, 200);
+    doc.setLineWidth(0.3);
+    doc.setLineDashPattern([2, 2], 0);
+    doc.line(10, 98, w - 10, 98);
+    doc.setLineDashPattern([], 0);
+
+    // Nome e ruolo
+    doc.setFontSize(10);
+    doc.setTextColor(50, 50, 50);
+    doc.setFont('helvetica', 'bold');
+    doc.text(TEAM.osteopata.nome + ' — Osteopata & Preparatore Atletico', 12, 105);
+
+    // Contatti
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(100, 100, 100);
+    doc.text('Tel: ' + TEAM.osteopata.telefono, 12, 112);
+
+    doc.setTextColor(255, 107, 0);
+    doc.text('@yourosteorunner_', 50, 112);
+    doc.text('a-teamcoaching.it', 100, 112);
+
+    // Footer
+    doc.setFontSize(8);
+    doc.setTextColor(180, 180, 180);
+    doc.text('Coupon generato da RunChoice', w / 2, h - 8, { align: 'center' });
+
+    // Scarichiamo il PDF
+    doc.save('coupon-luca-antonelli.pdf');
   });
 }
 
@@ -1507,6 +1640,44 @@ async function rilevaMeteomatico() {
           Prenota la tua visita con il Team Performance e risparmia il 10%!
         </p>
         <button className="coupon-button" onClick={generaCouponPDFLuca}>
+          🎟️ Scarica il tuo coupon sconto
+        </button>
+
+      </div>
+
+      {/* Sezione Luca Antonelli — Osteopata e Preparatore Atletico A-Team */}
+      <div className="team-card" style={{marginTop: '1rem'}}>
+
+        {/* Logo e nome */}
+        <div className="team-header">
+          <img src="/logo-ateam.png" alt="A-Team Running Club" className="team-logo" />
+          <div>
+            <p className="team-nome">{TEAM.osteopata.nome}</p>
+            <p className="team-ruolo">{TEAM.osteopata.ruolo}</p>
+          </div>
+        </div>
+
+        {/* Link social e contatti */}
+        <div className="team-contacts">
+          <a href={TEAM.osteopata.instagram_personale} target="_blank" rel="noopener noreferrer" className="team-link">
+            📸 @yourosteorunner_
+          </a>
+          <a href={TEAM.osteopata.instagram_team} target="_blank" rel="noopener noreferrer" className="team-link">
+            📸 @a_team_runningclub
+          </a>
+          <a href={`tel:${TEAM.osteopata.telefono}`} className="team-link">
+            📞 388 184 6001
+          </a>
+          <a href={TEAM.osteopata.sito} target="_blank" rel="noopener noreferrer" className="team-link">
+            🌐 a-teamcoaching.it
+          </a>
+        </div>
+
+        {/* Frase coupon e pulsante */}
+        <p className="team-coupon-text">
+          Prenota la tua consulenza con Luca e risparmia il 10%!
+        </p>
+        <button className="coupon-button" onClick={generaCouponPDFAteam}>
           🎟️ Scarica il tuo coupon sconto
         </button>
 
