@@ -1025,6 +1025,10 @@ export default function App() {
   // Nome della città rilevata dal GPS — null se non ancora rilevata
   const [citta, setCitta] = useState(null);
 
+  // Giorno di uscita — 'oggi' o 'domani'
+  // Permette all'utente di pianificare anche l'uscita del giorno successivo
+  // Salvato nel localStorage così l'utente non deve reimpostarlo ogni volta
+  const [giornoUscita, setGiornoUscita] = useState(() => localStorage.getItem('rc_giorno') || 'oggi');
 
   // ============================================================
   // CALCOLO CONSIGLI
@@ -1044,6 +1048,8 @@ export default function App() {
   React.useEffect(() => { localStorage.setItem('rc_humidity', humidity); }, [humidity]);
   React.useEffect(() => { localStorage.setItem('rc_sky', sky); }, [sky]);
   React.useEffect(() => { localStorage.setItem('rc_ora', oraUscita); }, [oraUscita]);
+  // Salva il giorno di uscita nel localStorage ogni volta che cambia
+  React.useEffect(() => { localStorage.setItem('rc_giorno', giornoUscita); }, [giornoUscita]);
 
 // ============================================================
 // FUNZIONE: rilevaMeteoautomatico
@@ -1097,13 +1103,14 @@ async function rilevaMeteomatico() {
         const lat = position.coords.latitude;
         const lon = position.coords.longitude;
 
-        // Costruiamo l'URL per Open-Meteo con i parametri che ci servono:
-        // - hourly: i dati che vogliamo ora per ora
-        // - temperature_2m: temperatura a 2 metri dal suolo in °C
-        // - windspeed_10m: velocità del vento a 10m in km/h
-        // - relativehumidity_2m: umidità relativa in %
-        // - timezone: auto per usare il fuso orario locale
-        const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=temperature_2m,relativehumidity_2m,windspeed_10m&timezone=auto&forecast_days=1`;
+        // Calcoliamo l'indice del giorno per Open-Meteo:
+        // - 'oggi' = giorno 0 → usiamo le prime 24 ore (indici 0-23)
+        // - 'domani' = giorno 1 → usiamo le seconde 24 ore (indici 24-47)
+        // Open-Meteo restituisce 48 ore di previsioni con forecast_days=2
+        const offsetGiorno = giornoUscita === 'domani' ? 24 : 0;
+
+        // Richiediamo 2 giorni di previsioni così abbiamo i dati anche per domani
+        const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=temperature_2m,relativehumidity_2m,windspeed_10m&timezone=auto&forecast_days=2`;
 
         // Chiamiamo l'API di Open-Meteo con fetch
         // "await" aspetta che la risposta arrivi prima di continuare
@@ -1112,13 +1119,13 @@ async function rilevaMeteomatico() {
         // Convertiamo la risposta in JSON (formato dati strutturato)
         const data = await response.json();
 
-        // Open-Meteo restituisce un array con 24 valori — uno per ogni ora.
-        // Usiamo l'ora scelta dall'utente come indice dell'array.
-        // Es. se oraUscita = 7, prendiamo data.hourly.temperature_2m[7]
-        const ora = oraUscita;
-        const temperatura = Math.round(data.hourly.temperature_2m[ora]);
-        const vento = Math.round(data.hourly.windspeed_10m[ora]);
-        const umidita = Math.round(data.hourly.relativehumidity_2m[ora]);
+        // Calcoliamo l'indice corretto nell'array delle previsioni orarie.
+        // Open-Meteo restituisce 48 valori (24 per oggi + 24 per domani).
+        // Es. se voglio domani alle 7 → indice = 24 + 7 = 31
+        const indice = offsetGiorno + oraUscita;
+        const temperatura = Math.round(data.hourly.temperature_2m[indice]);
+        const vento = Math.round(data.hourly.windspeed_10m[indice]);
+        const umidita = Math.round(data.hourly.relativehumidity_2m[indice]);
 
         // Chiamiamo l'API di geocoding inverso di Open-Meteo
         // per convertire le coordinate GPS in nome della città
@@ -1244,6 +1251,27 @@ async function rilevaMeteomatico() {
       <section>
         <p className="section-label">🌤️ Meteo automatico</p>
 
+        {/* Toggle Oggi / Domani — permette all'utente di scegliere
+            se vuole il meteo per oggi o per la mattina di domani.
+            Usa lo stesso stile delle pill già presenti nell'app */}
+        <div className="pill-group" style={{marginBottom: '12px'}}>
+          {/* Quando si cambia giorno resettiamo città e temp
+              così il messaggio di successo sparisce finché non
+              si clicca di nuovo su "Rileva meteo automatico" */}
+          <button
+            className={`pill ${giornoUscita === 'oggi' ? 'active' : ''}`}
+            onClick={() => { setGiornoUscita('oggi'); setCitta(null); setTemp(5); }}
+          >
+            📅 Oggi
+          </button>
+          <button
+            className={`pill ${giornoUscita === 'domani' ? 'active' : ''}`}
+            onClick={() => { setGiornoUscita('domani'); setCitta(null); setTemp(5); }}
+          >
+            📅 Domani
+          </button>
+        </div>
+
         {/* Selettore ora di uscita — l'utente sceglie a che ora vuole correre
             Le opzioni vanno dalle 5 alle 22 con step di 1 ora */}
         <div className="ora-uscita">
@@ -1284,11 +1312,10 @@ async function rilevaMeteomatico() {
           <p className="meteo-errore">⚠️ {erroreMeteo}</p>
         )}
 
-        {/* Messaggio di successo con città rilevata
-            Mostra l'ora e la città dove è stato rilevato il meteo */}
+        {/* Messaggio di successo con giorno, ora e città rilevata */}
         {!loadingMeteo && !erroreMeteo && temp !== 5 && (
           <p className="meteo-successo">
-            ✅ Meteo aggiornato per le {oraUscita}:00 a {citta || 'posizione rilevata'}!
+            ✅ Meteo {giornoUscita} alle {oraUscita}:00 a {citta || 'posizione rilevata'}!
           </p>
         )}
 
