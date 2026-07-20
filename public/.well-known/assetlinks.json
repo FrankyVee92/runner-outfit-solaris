@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "com.fv.runneroutfit",
+        "sha256_cert_fingerprints": ["23:81:E8:88:18:09:AC:98:6B:E2:B4:82:B7:84:40:D3:D5:A8:B0:CE:FE:7D:89:15:02:61:30:47:58:E0:AF:F1"]
+      }
+    }]
