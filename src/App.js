@@ -1273,18 +1273,21 @@ async function rilevaMeteomatico() {
         </div>
 
         {/* Selettore ora di uscita — l'utente sceglie a che ora vuole correre
-            Le opzioni vanno dalle 5 alle 22 con step di 1 ora */}
+            Le opzioni vanno dalle 00 alle 23 con step di 1 ora */}
         <div className="ora-uscita">
           <label className="ora-label">A che ora esci a correre?</label>
+          {/* Quando si cambia ora resettiamo città e temp
+              così il messaggio di successo sparisce finché non
+              si clicca di nuovo su "Rileva meteo automatico" */}
           <select
             className="ora-select"
             value={oraUscita}
-            onChange={e => setOraUscita(Number(e.target.value))}
+            onChange={e => { setOraUscita(Number(e.target.value)); setCitta(null); setTemp(5); }}
           >
-            {/* Generiamo le opzioni da 5 a 22 — orari ragionevoli per correre
-                Array.from crea un array di 18 elementi (da 5 a 22)
-                e per ognuno creiamo un'opzione con l'ora formattata */}
-            {Array.from({ length: 18 }, (_, i) => i + 5).map(ora => (
+            {/* Mostriamo tutte le 24 ore — dai runner mattinieri delle 4
+                ai notturni delle 23! Array.from crea un array di 24 elementi
+                da 0 a 23 — uno per ogni ora del giorno */}
+            {Array.from({ length: 24 }, (_, i) => i).map(ora => (
               <option key={ora} value={ora}>
                 {ora}:00
               </option>
@@ -1312,10 +1315,14 @@ async function rilevaMeteomatico() {
           <p className="meteo-errore">⚠️ {erroreMeteo}</p>
         )}
 
-        {/* Messaggio di successo con giorno, ora e città rilevata */}
-        {!loadingMeteo && !erroreMeteo && temp !== 5 && (
+        {/* Messaggio di successo con giorno, ora e città rilevata.
+            Mostriamo il messaggio SOLO se citta non è null —
+            citta viene impostata solo dopo aver cliccato "Rileva meteo"
+            quindi è il modo più affidabile per sapere se il meteo
+            è stato effettivamente rilevato in questa sessione */}
+        {!loadingMeteo && !erroreMeteo && citta !== null && (
           <p className="meteo-successo">
-            ✅ Meteo {giornoUscita} alle {oraUscita}:00 a {citta || 'posizione rilevata'}!
+            ✅ Meteo {giornoUscita} alle {oraUscita}:00 a {citta}!
           </p>
         )}
 
