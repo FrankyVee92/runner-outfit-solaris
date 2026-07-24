@@ -373,3 +373,23 @@ hr { border: none; border-top: 1px solid #f0f0f0; margin: 1.5rem 0; }
   color: #2e7d32;
   margin-top: 6px;
 }
+
+/* Link legali in fondo all'app */
+.legal-links {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+.legal-link {
+  font-size: 12px;
+  color: #aaa;
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.legal-link:hover {
+  color: #555;
+}

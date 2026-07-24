@@ -1278,7 +1278,7 @@ async function rilevaMeteomatico() {
         setWind(vento);
         setHumidity(umidita);
 
-        // Nascostiamo il messaggio di caricamento
+        // Nascondiamo il messaggio di caricamento
         setLoadingMeteo(false);
 
       } catch (error) {
@@ -1698,6 +1698,17 @@ async function rilevaMeteomatico() {
           </a>
         </div>
       </div>
+      {/* Link discreti a Privacy Policy e Credits
+            Importanti per la trasparenza legale e per citare
+            correttamente i servizi di terze parti utilizzati */}
+        <div className="legal-links">
+          <a href="/privacy.html" target="_blank" rel="noopener noreferrer" className="legal-link">
+            🔒 Privacy Policy
+          </a>
+          <a href="/credits.html" target="_blank" rel="noopener noreferrer" className="legal-link">
+            ℹ️ Credits & Licenze
+          </a>
+        </div>
     </div>
   );
 }
