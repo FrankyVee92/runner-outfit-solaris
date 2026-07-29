@@ -1243,7 +1243,9 @@ async function rilevaMeteomatico() {
         const offsetGiorno = giornoUscita === 'domani' ? 24 : 0;
 
         // Richiediamo 2 giorni di previsioni così abbiamo i dati anche per domani
-        const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=temperature_2m,relativehumidity_2m,windspeed_10m&timezone=auto&forecast_days=2`;
+        // Aggiungiamo weathercode alla richiesta — ci dice le condizioni del cielo
+        // per ogni ora (sole, nuvolo, pioggia, neve, ecc.)
+        const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=temperature_2m,relativehumidity_2m,windspeed_10m,weathercode&timezone=auto&forecast_days=2`;
 
         // Chiamiamo l'API di Open-Meteo con fetch
         // "await" aspetta che la risposta arrivi prima di continuare
@@ -1259,6 +1261,29 @@ async function rilevaMeteomatico() {
         const temperatura = Math.round(data.hourly.temperature_2m[indice]);
         const vento = Math.round(data.hourly.windspeed_10m[indice]);
         const umidita = Math.round(data.hourly.relativehumidity_2m[indice]);
+
+        // Interpretiamo il weathercode di Open-Meteo per impostare sky.
+        // I codici WMO (World Meteorological Organization) indicano:
+        // 0-1 = cielo sereno → 'sunny'
+        // 2-3 = parzialmente nuvoloso → 'cloudy'
+        // 51-99 = pioggia o precipitazioni → 'rain'
+        // Per tutti gli altri codici (nebbia, neve, ecc.) → 'cloudy'
+        const weatherCode = data.hourly.weathercode[indice];
+        let cielo;
+        if (weatherCode <= 1) {
+          // Sereno o prevalentemente sereno
+          cielo = 'sunny';
+        } else if (weatherCode <= 3) {
+          // Parzialmente nuvoloso o coperto
+          cielo = 'cloudy';
+        } else if (weatherCode >= 51) {
+          // Pioggia, temporale o neve
+          cielo = 'rain';
+        } else {
+          // Nebbia o altri fenomeni — mettiamo nuvoloso per sicurezza
+          cielo = 'cloudy';
+        }
+        setSky(cielo);
 
         // Chiamiamo l'API di geocoding inverso di Open-Meteo
         // per convertire le coordinate GPS in nome della città
