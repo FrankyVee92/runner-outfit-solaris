@@ -1158,6 +1158,15 @@ export default function App() {
   // Nome della città rilevata dal GPS — null se non ancora rilevata
   const [citta, setCitta] = useState(null);
 
+  // Modalità di rilevamento posizione — 'gps' o 'manuale'
+  // 'gps' = rileva automaticamente tramite GPS
+  // 'manuale' = l'utente inserisce la città manualmente
+  const [modalitaMeteo, setModalitaMeteo] = useState(() => localStorage.getItem('rc_modalita') || 'gps');
+
+  // Città inserita manualmente dall'utente
+  // Usata solo quando modalitaMeteo === 'manuale'
+  const [cittaManuale, setCittaManuale] = useState(() => localStorage.getItem('rc_citta_manuale') || '');
+
   // Giorno di uscita — 'oggi' o 'domani'
   // Permette all'utente di pianificare anche l'uscita del giorno successivo
   // Salvato nel localStorage così l'utente non deve reimpostarlo ogni volta
@@ -1181,41 +1190,136 @@ export default function App() {
   React.useEffect(() => { localStorage.setItem('rc_humidity', humidity); }, [humidity]);
   React.useEffect(() => { localStorage.setItem('rc_sky', sky); }, [sky]);
   React.useEffect(() => { localStorage.setItem('rc_ora', oraUscita); }, [oraUscita]);
+  // Salva la modalità meteo nel localStorage ogni volta che cambia
+  React.useEffect(() => { localStorage.setItem('rc_modalita', modalitaMeteo); }, [modalitaMeteo]);
+
+  // Salva la città manuale nel localStorage ogni volta che cambia
+  React.useEffect(() => { localStorage.setItem('rc_citta_manuale', cittaManuale); }, [cittaManuale]);
   // Salva il giorno di uscita nel localStorage ogni volta che cambia
   React.useEffect(() => { localStorage.setItem('rc_giorno', giornoUscita); }, [giornoUscita]);
 
 // ============================================================
-// FUNZIONE: rilevaMeteoautomatico
+// FUNZIONE: rilevaMeteomatico
 // ============================================================
-// Questa funzione fa tre cose in sequenza:
+// Gestisce due modalità di rilevamento meteo:
 //
+// MODALITÀ GPS:
 // 1. Chiede al browser la posizione GPS dell'utente
-//    Il browser mostra una finestra di conferma — l'utente
-//    deve cliccare "Consenti" per procedere.
+// 2. Invia le coordinate a Open-Meteo per le previsioni orarie
+// 3. Aggiorna temperatura, vento, umidità e cielo automaticamente
 //
-// 2. Invia le coordinate a Open-Meteo (servizio meteo gratuito)
-//    con la richiesta delle previsioni orarie per oggi.
-//    Open-Meteo restituisce temperatura, vento e umidità
-//    per ogni ora del giorno nella posizione dell'utente.
+// MODALITÀ MANUALE:
+// 1. Prende la città inserita dall'utente
+// 2. Chiama Nominatim per trovare le coordinate della città
+// 3. Invia le coordinate a Open-Meteo per le previsioni orarie
+// 4. Aggiorna temperatura, vento, umidità e cielo automaticamente
 //
-// 3. Aggiorna automaticamente i cursori dell'app con i valori
-//    meteo dell'ora scelta dall'utente per uscire a correre.
-//
-// In caso di errore (GPS negato, nessuna connessione, ecc.)
-// mostra un messaggio di errore all'utente.
-//
-// Open-Meteo API: https://open-meteo.com/
-// È gratuita, non richiede registrazione né API key.
+// In entrambi i casi mostra il nome della città rilevata.
 // ============================================================
 async function rilevaMeteomatico() {
 
   // Impostiamo loadingMeteo a true per mostrare il messaggio di caricamento
-  // e azzeriamo eventuali errori precedenti
   setLoadingMeteo(true);
   setErroreMeteo(null);
+  setCitta(null);
+
+  // Funzione interna che prende le coordinate e chiama Open-Meteo
+  // È la stessa per GPS e manuale — evita di duplicare il codice
+  // "lat" e "lon" sono le coordinate, "nomeCitta" è il nome da mostrare
+  async function fetchMeteo(lat, lon, nomeCitta) {
+    try {
+
+      // Calcoliamo l'indice corretto nell'array delle previsioni orarie.
+      // Open-Meteo restituisce 48 valori (24 per oggi + 24 per domani).
+      const offsetGiorno = giornoUscita === 'domani' ? 24 : 0;
+      const indice = offsetGiorno + oraUscita;
+
+      // Chiamiamo Open-Meteo con le coordinate e i parametri che ci servono
+      const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=temperature_2m,relativehumidity_2m,windspeed_10m,weathercode&timezone=auto&forecast_days=2`;
+      const response = await fetch(url);
+      const data = await response.json();
+
+      // Estraiamo i valori meteo per l'ora e il giorno scelti
+      const temperatura = Math.round(data.hourly.temperature_2m[indice]);
+      const vento = Math.round(data.hourly.windspeed_10m[indice]);
+      const umidita = Math.round(data.hourly.relativehumidity_2m[indice]);
+
+      // Interpretiamo il weathercode per impostare sky
+      // 0-1 = sereno, 2-3 = nuvoloso, 51+ = pioggia
+      const weatherCode = data.hourly.weathercode[indice];
+      let cielo;
+      if (weatherCode <= 1) {
+        cielo = 'sunny';
+      } else if (weatherCode <= 3) {
+        cielo = 'cloudy';
+      } else if (weatherCode >= 51) {
+        cielo = 'rain';
+      } else {
+        cielo = 'cloudy';
+      }
+
+      // Aggiorniamo tutti i parametri meteo dell'app
+      setTemp(temperatura);
+      setWind(vento);
+      setHumidity(umidita);
+      setSky(cielo);
+      setCitta(nomeCitta);
+      setLoadingMeteo(false);
+
+    } catch (error) {
+      // Errore nella chiamata a Open-Meteo
+      setErroreMeteo('Errore nel recupero del meteo. Controlla la connessione.');
+      setLoadingMeteo(false);
+    }
+  }
+
+  // ============================================================
+  // MODALITÀ MANUALE — l'utente ha inserito una città
+  // ============================================================
+  if (modalitaMeteo === 'manuale') {
+
+    // Verifichiamo che l'utente abbia inserito qualcosa
+    if (!cittaManuale.trim()) {
+      setErroreMeteo('Inserisci il nome di una città.');
+      setLoadingMeteo(false);
+      return;
+    }
+
+    try {
+      // Chiamiamo Nominatim per trovare le coordinate della città inserita
+      // encodeURIComponent converte caratteri speciali per l'URL (es. spazi → %20)
+      const geoUrl = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(cittaManuale)}&format=json&limit=1`;
+      const geoResponse = await fetch(geoUrl);
+      const geoData = await geoResponse.json();
+
+      // Se Nominatim non trova nessuna città mostriamo un errore
+      if (!geoData || geoData.length === 0) {
+        setErroreMeteo('Città non trovata. Prova con un nome diverso.');
+        setLoadingMeteo(false);
+        return;
+      }
+
+      // Estraiamo le coordinate del primo risultato trovato
+      const lat = parseFloat(geoData[0].lat);
+      const lon = parseFloat(geoData[0].lon);
+      // Usiamo il nome ufficiale restituito da Nominatim
+      const nomeCitta = geoData[0].display_name.split(',')[0];
+
+      // Chiamiamo Open-Meteo con le coordinate trovate
+      await fetchMeteo(lat, lon, nomeCitta);
+
+    } catch (error) {
+      setErroreMeteo('Errore nella ricerca della città. Controlla la connessione.');
+      setLoadingMeteo(false);
+    }
+    return;
+  }
+
+  // ============================================================
+  // MODALITÀ GPS — rileviamo la posizione automaticamente
+  // ============================================================
 
   // Verifichiamo che il browser supporti la geolocalizzazione
-  // Non tutti i browser o dispositivi ce l'hanno
   if (!navigator.geolocation) {
     setErroreMeteo('Il tuo browser non supporta la geolocalizzazione.');
     setLoadingMeteo(false);
@@ -1223,99 +1327,30 @@ async function rilevaMeteomatico() {
   }
 
   // Chiediamo la posizione GPS all'utente
-  // getCurrentPosition è asincrona — il browser mostra una finestra
-  // di conferma e poi chiama la funzione di callback con le coordinate
   navigator.geolocation.getCurrentPosition(
 
-    // Callback di successo — viene chiamata quando l'utente accetta
-    // e il GPS ha trovato la posizione
+    // Callback di successo
     async (position) => {
+      const lat = position.coords.latitude;
+      const lon = position.coords.longitude;
+
+      // Chiamiamo Nominatim per ottenere il nome della città dalle coordinate
       try {
-
-        // Estraiamo latitudine e longitudine dalla posizione GPS
-        const lat = position.coords.latitude;
-        const lon = position.coords.longitude;
-
-        // Calcoliamo l'indice del giorno per Open-Meteo:
-        // - 'oggi' = giorno 0 → usiamo le prime 24 ore (indici 0-23)
-        // - 'domani' = giorno 1 → usiamo le seconde 24 ore (indici 24-47)
-        // Open-Meteo restituisce 48 ore di previsioni con forecast_days=2
-        const offsetGiorno = giornoUscita === 'domani' ? 24 : 0;
-
-        // Richiediamo 2 giorni di previsioni così abbiamo i dati anche per domani
-        // Aggiungiamo weathercode alla richiesta — ci dice le condizioni del cielo
-        // per ogni ora (sole, nuvolo, pioggia, neve, ecc.)
-        const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=temperature_2m,relativehumidity_2m,windspeed_10m,weathercode&timezone=auto&forecast_days=2`;
-
-        // Chiamiamo l'API di Open-Meteo con fetch
-        // "await" aspetta che la risposta arrivi prima di continuare
-        const response = await fetch(url);
-
-        // Convertiamo la risposta in JSON (formato dati strutturato)
-        const data = await response.json();
-
-        // Calcoliamo l'indice corretto nell'array delle previsioni orarie.
-        // Open-Meteo restituisce 48 valori (24 per oggi + 24 per domani).
-        // Es. se voglio domani alle 7 → indice = 24 + 7 = 31
-        const indice = offsetGiorno + oraUscita;
-        const temperatura = Math.round(data.hourly.temperature_2m[indice]);
-        const vento = Math.round(data.hourly.windspeed_10m[indice]);
-        const umidita = Math.round(data.hourly.relativehumidity_2m[indice]);
-
-        // Interpretiamo il weathercode di Open-Meteo per impostare sky.
-        // I codici WMO (World Meteorological Organization) indicano:
-        // 0-1 = cielo sereno → 'sunny'
-        // 2-3 = parzialmente nuvoloso → 'cloudy'
-        // 51-99 = pioggia o precipitazioni → 'rain'
-        // Per tutti gli altri codici (nebbia, neve, ecc.) → 'cloudy'
-        const weatherCode = data.hourly.weathercode[indice];
-        let cielo;
-        if (weatherCode <= 1) {
-          // Sereno o prevalentemente sereno
-          cielo = 'sunny';
-        } else if (weatherCode <= 3) {
-          // Parzialmente nuvoloso o coperto
-          cielo = 'cloudy';
-        } else if (weatherCode >= 51) {
-          // Pioggia, temporale o neve
-          cielo = 'rain';
-        } else {
-          // Nebbia o altri fenomeni — mettiamo nuvoloso per sicurezza
-          cielo = 'cloudy';
-        }
-        setSky(cielo);
-
-        // Chiamiamo l'API di geocoding inverso di Open-Meteo
-        // per convertire le coordinate GPS in nome della città
-        // "geocoding inverso" = da coordinate a nome del luogo
         const geoUrl = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`;
         const geoResponse = await fetch(geoUrl);
         const geoData = await geoResponse.json();
-
-        // Estraiamo il nome della città dalla risposta
-        // Proviamo prima city, poi town, poi village, poi county
         const nomeCitta = geoData.address.city || geoData.address.town || geoData.address.village || geoData.address.county || 'Posizione rilevata';
-        setCitta(nomeCitta);
 
-        // Aggiorniamo i cursori dell'app con i valori meteo recuperati
-        // React ridisegnerà automaticamente l'interfaccia con i nuovi valori
-        setTemp(temperatura);
-        setWind(vento);
-        setHumidity(umidita);
-
-        // Nascondiamo il messaggio di caricamento
-        setLoadingMeteo(false);
+        // Chiamiamo Open-Meteo con le coordinate GPS
+        await fetchMeteo(lat, lon, nomeCitta);
 
       } catch (error) {
-        // Se qualcosa va storto (es. nessuna connessione internet)
-        // mostriamo un messaggio di errore all'utente
-        setErroreMeteo('Errore nel recupero del meteo. Controlla la connessione.');
-        setLoadingMeteo(false);
+        // Se Nominatim fallisce usiamo le coordinate comunque
+        await fetchMeteo(lat, lon, 'Posizione rilevata');
       }
     },
 
-    // Callback di errore — viene chiamata se l'utente nega il permesso GPS
-    // o se c'è un problema con la geolocalizzazione
+    // Callback di errore GPS
     (error) => {
       setErroreMeteo('Posizione non disponibile. Controlla i permessi GPS.');
       setLoadingMeteo(false);
@@ -1408,6 +1443,40 @@ async function rilevaMeteomatico() {
           rilevare automaticamente le condizioni meteo tramite GPS */}
       <section>
         <p className="section-label">🌤️ Meteo automatico</p>
+
+        {/* Toggle modalità meteo — GPS o inserimento manuale città
+            Permette all'utente di scegliere come rilevare il meteo:
+            - GPS: rileva automaticamente la posizione
+            - Manuale: inserisce il nome della città */}
+        <div className="pill-group" style={{marginBottom: '12px'}}>
+          <button
+            className={`pill ${modalitaMeteo === 'gps' ? 'active' : ''}`}
+            onClick={() => { setModalitaMeteo('gps'); setCitta(null); setTemp(5); }}
+          >
+            📍 GPS automatico
+          </button>
+          <button
+            className={`pill ${modalitaMeteo === 'manuale' ? 'active' : ''}`}
+            onClick={() => { setModalitaMeteo('manuale'); setCitta(null); setTemp(5); }}
+          >
+            🔍 Inserisci città
+          </button>
+        </div>
+
+        {/* Campo di testo per la città manuale — visibile solo in modalità manuale
+            "&&" in JSX = "se vero, mostra questo elemento" */}
+        {modalitaMeteo === 'manuale' && (
+          <div className="citta-manuale">
+            <input
+              type="text"
+              className="citta-input"
+              placeholder="Es. Roma, Milano, Ancona..."
+              value={cittaManuale}
+              onChange={e => setCittaManuale(e.target.value)}
+              onKeyDown={e => { if (e.key === 'Enter') rilevaMeteomatico(); }}
+            />
+          </div>
+        )}
 
         {/* Toggle Oggi / Domani — permette all'utente di scegliere
             se vuole il meteo per oggi o per la mattina di domani.

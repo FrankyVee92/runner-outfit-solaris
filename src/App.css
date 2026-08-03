@@ -393,3 +393,24 @@ hr { border: none; border-top: 1px solid #f0f0f0; margin: 1.5rem 0; }
 .legal-link:hover {
   color: #555;
 }
+
+/* Campo inserimento città manuale */
+.citta-manuale {
+  margin-bottom: 12px;
+}
+
+.citta-input {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+  color: #1a1a1a;
+  background: white;
+  box-sizing: border-box;
+}
+
+.citta-input:focus {
+  outline: none;
+  border-color: #1565C0;
+}
