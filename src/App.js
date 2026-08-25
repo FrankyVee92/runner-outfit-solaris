@@ -436,6 +436,26 @@ const TEAM = {
     // Stesso codice sconto dei nutrizionisti
     codice_sconto: 'FrancescoVergaRunChoice',
     sconto: '10%',
+  },
+
+  // Fisioterapista Specializzato — Luca Squadroni, Montecosaro
+  // Collaborazione reciproca — promuove anche la sua app Tepy
+  // Coupon sconto del 10% su una seduta generabile dall'app
+  fisioterapista: {
+    nome: 'Luca Squadroni',
+    ruolo: 'Fisioterapista Specializzato',
+    instagram_personale: 'https://www.instagram.com/luca_squadroni',
+    instagram_team: null,
+    sito: 'https://www.lucasquadroni.com/',
+    // Numero WhatsApp professionale per prenotare
+    telefono: '3394313799',
+    // Codice sconto per coupon seduta fisioterapica
+    codice_sconto: 'FrancescoVergaRunChoice',
+    sconto: '10%',
+    // App di Luca — Tepy — con codice sconto dedicato
+    app_nome: 'Tepy',
+    app_url: 'https://tepy.app/',
+    app_codice: 'TEPY30',
   }
 
 };
@@ -781,6 +801,139 @@ function generaCouponPDFAteam() {
   });
 }
 
+// ============================================================
+// FUNZIONE: generaCouponPDFSquadroni
+// ============================================================
+// Genera il coupon PDF per Luca Squadroni, Fisioterapista.
+// Stessa struttura grafica delle altre funzioni coupon ma con:
+// - Logo Luca Squadroni invece degli altri loghi
+// - Dati di Luca Squadroni (nome, ruolo, instagram, telefono)
+// - Sezione dedicata alla sua app Tepy con codice sconto TEPY30
+// Il codice sconto per la seduta è lo stesso degli altri professionisti.
+// ============================================================
+function generaCouponPDFSquadroni() {
+
+  const doc = new jsPDF('l', 'mm', 'a5');
+  const w = doc.internal.pageSize.getWidth();
+  const h = doc.internal.pageSize.getHeight();
+
+  // Sfondo bianco
+  doc.setFillColor(255, 255, 255);
+  doc.rect(0, 0, w, h, 'F');
+
+  // Bordo tratteggiato esterno
+  doc.setDrawColor(180, 180, 180);
+  doc.setLineWidth(0.3);
+  doc.setLineDashPattern([3, 2], 0);
+  doc.rect(5, 5, w - 10, h - 10);
+  doc.setLineDashPattern([], 0);
+
+  // Striscia verde acqua in cima — colore logo Luca Squadroni
+  doc.setFillColor(75, 170, 160);
+  doc.rect(5, 5, w - 10, 8, 'F');
+
+  // Carichiamo i loghi
+  const logoSquadroni = new Image();
+  logoSquadroni.src = '/LucaSquadroniLogo.png';
+
+  const logoRC = new Image();
+  logoRC.src = '/logo-runchoice.png';
+
+  Promise.all([
+    new Promise(resolve => { logoSquadroni.onload = resolve; logoSquadroni.onerror = resolve; }),
+    new Promise(resolve => { logoRC.onload = resolve; logoRC.onerror = resolve; })
+  ]).then(() => {
+
+    // Logo Luca Squadroni a sinistra
+    try { doc.addImage(logoSquadroni, 'PNG', 8, 13, 55, 28); } catch(e) {}
+
+    // Logo RunChoice a destra
+    try { doc.addImage(logoRC, 'PNG', w - 35, 18, 25, 25); } catch(e) {}
+
+    // Titolo coupon
+    doc.setFontSize(10);
+    doc.setTextColor(100, 100, 100);
+    doc.setFont('helvetica', 'normal');
+    doc.text('COUPON SCONTO ESCLUSIVO', w / 2, 48, { align: 'center' });
+
+    // Percentuale sconto
+    doc.setFontSize(36);
+    doc.setTextColor(75, 170, 160);
+    doc.setFont('helvetica', 'bold');
+    doc.text(TEAM.fisioterapista.sconto, w / 2, 62, { align: 'center' });
+
+    // Testo sotto la percentuale
+    doc.setFontSize(11);
+    doc.setTextColor(50, 50, 50);
+    doc.setFont('helvetica', 'normal');
+    doc.text('sulla tua seduta con Luca Squadroni', w / 2, 70, { align: 'center' });
+
+    // Box codice sconto seduta
+    doc.setFillColor(245, 245, 245);
+    doc.setDrawColor(200, 200, 200);
+    doc.setLineWidth(0.3);
+    doc.roundedRect(20, 74, w - 40, 16, 3, 3, 'FD');
+
+    // Etichetta codice seduta
+    doc.setFontSize(8);
+    doc.setTextColor(120, 120, 120);
+    doc.text('CODICE SCONTO SEDUTA', w / 2, 80, { align: 'center' });
+
+    // Codice sconto seduta
+    doc.setFontSize(12);
+    doc.setTextColor(75, 170, 160);
+    doc.setFont('helvetica', 'bold');
+    doc.text(TEAM.fisioterapista.codice_sconto, w / 2, 87, { align: 'center' });
+
+    // Box codice sconto app Tepy
+    doc.setFillColor(240, 250, 249);
+    doc.setDrawColor(75, 170, 160);
+    doc.setLineWidth(0.5);
+    doc.roundedRect(20, 93, w - 40, 16, 3, 3, 'FD');
+
+    // Etichetta app Tepy
+    doc.setFontSize(8);
+    doc.setTextColor(120, 120, 120);
+    doc.text('SCARICA L\'APP TEPY — CODICE SCONTO', w / 2, 99, { align: 'center' });
+
+    // Codice sconto Tepy
+    doc.setFontSize(12);
+    doc.setTextColor(75, 170, 160);
+    doc.setFont('helvetica', 'bold');
+    doc.text(TEAM.fisioterapista.app_codice + ' — ' + TEAM.fisioterapista.app_url, w / 2, 106, { align: 'center' });
+
+    // Linea divisoria tratteggiata
+    doc.setDrawColor(200, 200, 200);
+    doc.setLineWidth(0.3);
+    doc.setLineDashPattern([2, 2], 0);
+    doc.line(10, 113, w - 10, 113);
+    doc.setLineDashPattern([], 0);
+
+    // Nome e ruolo
+    doc.setFontSize(10);
+    doc.setTextColor(50, 50, 50);
+    doc.setFont('helvetica', 'bold');
+    doc.text(TEAM.fisioterapista.nome + ' — Fisioterapista Specializzato', 12, 120);
+
+    // Contatti
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(100, 100, 100);
+    doc.text('Tel/WA: ' + TEAM.fisioterapista.telefono, 12, 127);
+
+    doc.setTextColor(75, 170, 160);
+    doc.text('@luca_squadroni', 60, 127);
+    doc.text('lucasquadroni.com', 110, 127);
+
+    // Footer
+    doc.setFontSize(8);
+    doc.setTextColor(180, 180, 180);
+    doc.text('Coupon generato da RunChoice', w / 2, h - 8, { align: 'center' });
+
+    // Scarichiamo il PDF
+    doc.save('coupon-luca-squadroni.pdf');
+  });
+}
 
 // ============================================================
 // FUNZIONE: windChill
@@ -1772,6 +1925,44 @@ async function rilevaMeteomatico() {
           Prenota la tua consulenza con Luca e risparmia il 10%!
         </p>
         <button className="coupon-button" onClick={generaCouponPDFAteam}>
+          🎟️ Scarica il tuo coupon sconto
+        </button>
+
+      </div>
+
+            {/* Sezione Luca Squadroni — Fisioterapista Specializzato */}
+      <div className="team-card" style={{marginTop: '1rem'}}>
+
+        {/* Logo e nome */}
+        <div className="team-header">
+          <img src="/LucaSquadroniLogo.png" alt="Luca Squadroni Fisioterapista" className="team-logo" />
+          <div>
+            <p className="team-nome">{TEAM.fisioterapista.nome}</p>
+            <p className="team-ruolo">{TEAM.fisioterapista.ruolo}</p>
+          </div>
+        </div>
+
+        {/* Link social e contatti */}
+        <div className="team-contacts">
+          <a href={TEAM.fisioterapista.instagram_personale} target="_blank" rel="noopener noreferrer" className="team-link">
+            📸 @luca_squadroni
+          </a>
+          <a href={`tel:${TEAM.fisioterapista.telefono}`} className="team-link">
+            📞 339 431 3799
+          </a>
+          <a href={TEAM.fisioterapista.sito} target="_blank" rel="noopener noreferrer" className="team-link">
+            🌐 lucasquadroni.com
+          </a>
+          <a href={TEAM.fisioterapista.app_url} target="_blank" rel="noopener noreferrer" className="team-link">
+            📱 App Tepy — codice {TEAM.fisioterapista.app_codice}
+          </a>
+        </div>
+
+        {/* Frase coupon e pulsante */}
+        <p className="team-coupon-text">
+          Prenota la tua seduta con Luca e risparmia il 10%!
+        </p>
+        <button className="coupon-button" onClick={generaCouponPDFSquadroni}>
           🎟️ Scarica il tuo coupon sconto
         </button>
 
