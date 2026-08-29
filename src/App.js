@@ -14,6 +14,91 @@ import './App.css';
 import jsPDF from 'jspdf';
 
 // ============================================================
+// *** LINK ALTERNATIVI — MISTER RUNNING E DECATHLON ***
+// ============================================================
+// Questi link sostituiscono temporaneamente i prodotti Solaris
+// in attesa di nuove collaborazioni con negozi partner.
+//
+// MISTER RUNNING — specializzato running, buon assortimento
+// DECATHLON — opzione economica accessibile a tutti
+//
+// Quando Sport Life 23 o altri negozi accettano la collaborazione
+// sostituire i link MisterRunning con i loro link diretti.
+// ============================================================
+
+const MR = {
+  male: {
+    termica_leggera:   'https://www.misterrunning.com/it/intimo-uomo/',
+    termica_invernale: 'https://www.misterrunning.com/it/intimo-uomo/',
+    maglia_lunga:      'https://www.misterrunning.com/it/shirts-running-uomo/',
+    maglia_corta:      'https://www.misterrunning.com/it/tshirts-uomo-running/',
+    shorts:            'https://www.misterrunning.com/it/pantaloncini-running-uomo/',
+    leggins_lunghi:    'https://www.misterrunning.com/it/pants-tights-running-uomo/',
+    leggins_corti:     'https://www.misterrunning.com/it/pantaloncini-running-uomo/',
+    antivento:         'https://www.misterrunning.com/it/giacche-running-uomo/',
+    impermeabile:      'https://www.misterrunning.com/it/giacche-running-uomo/',
+    felpa:             'https://www.misterrunning.com/it/felpe-running-uomo/',
+    calzini:           'https://www.misterrunning.com/it/calze-running/',
+    guanti:            'https://www.misterrunning.com/it/guanti/',
+    cappello:          'https://www.misterrunning.com/it/berretti/',
+    scaldacollo:       'https://www.misterrunning.com/it/scaldacollo/',
+  },
+  female: {
+    termica_leggera:   'https://www.misterrunning.com/it/intimo-sport-donna/',
+    termica_invernale: 'https://www.misterrunning.com/it/intimo-sport-donna/',
+    maglia_lunga:      'https://www.misterrunning.com/it/maglie-running-donna/',
+    maglia_corta:      'https://www.misterrunning.com/it/magliette-running-donna/',
+    shorts:            'https://www.misterrunning.com/it/pantaloncini-gonne-running-donna/',
+    leggins_lunghi:    'https://www.misterrunning.com/it/pants-tights-running-donna/',
+    leggins_corti:     'https://www.misterrunning.com/it/pantaloncini-gonne-running-donna/',
+    antivento:         'https://www.misterrunning.com/it/giacche-running-donna/',
+    impermeabile:      'https://www.misterrunning.com/it/giacche-running-donna/',
+    felpa:             'https://www.misterrunning.com/it/felpe-running-donna/',
+    calzini:           'https://www.misterrunning.com/it/calze-running/',
+    guanti:            'https://www.misterrunning.com/it/guanti/',
+    cappello:          'https://www.misterrunning.com/it/berretti/',
+    scaldacollo:       'https://www.misterrunning.com/it/scaldacollo/',
+    top:               'https://www.misterrunning.com/it/reggiseno-sportivo-intemo-tecnico-running-donna/',
+  }
+};
+
+const DEC = {
+  male: {
+    termica_leggera:   'https://www.decathlon.it/uomo/maglietta-termica',
+    termica_invernale: 'https://www.decathlon.it/uomo/maglietta-termica',
+    maglia_lunga:      'https://www.decathlon.it/tutti-gli-sport/running/maglie-a-maniche-lunghe-running-uomo',
+    maglia_corta:      'https://www.decathlon.it/tutti-gli-sport/running/t-shirt-running-uomo',
+    shorts:            'https://www.decathlon.it/tutti-gli-sport/running/pantaloncini-running-uomo',
+    leggins_lunghi:    'https://www.decathlon.it/tutti-gli-sport/running/leggings-running-uomo',
+    leggins_corti:     'https://www.decathlon.it/tutti-gli-sport/running/corsari-running-uomo',
+    antivento:         'https://www.decathlon.it/tutti-gli-sport/running/giacche-antivento-running-uomo',
+    impermeabile:      'https://www.decathlon.it/tutti-gli-sport/running/giacche-impermeabili-running-uomo',
+    felpa:             'https://www.decathlon.it/tutti-gli-sport/running/felpe-e-giacche-calde-running-uomo',
+    calzini:           'https://www.decathlon.it/tutti-gli-sport/running/calze-running-uomo',
+    guanti:            'https://www.decathlon.it/tutti-gli-sport/running/guanti-running',
+    cappello:          'https://www.decathlon.it/tutti-gli-sport/running/headwear-running',
+    scaldacollo:       'https://www.decathlon.it/tutti-gli-sport/running/scaldacollo-e-buff-running',
+  },
+  female: {
+    termica_leggera:   'https://www.decathlon.it/tutti-gli-sport/sport-invernali/maglie-termiche-donna',
+    termica_invernale: 'https://www.decathlon.it/tutti-gli-sport/sport-invernali/maglie-termiche-donna',
+    maglia_lunga:      'https://www.decathlon.it/tutti-gli-sport/running/maglie-a-maniche-lunghe-running-donna',
+    maglia_corta:      'https://www.decathlon.it/tutti-gli-sport/running/t-shirt-running-donna',
+    shorts:            'https://www.decathlon.it/tutti-gli-sport/running/short-running-donna',
+    leggins_lunghi:    'https://www.decathlon.it/tutti-gli-sport/running/leggings-running-donna',
+    leggins_corti:     'https://www.decathlon.it/tutti-gli-sport/running/corsari-running-donna',
+    antivento:         'https://www.decathlon.it/tutti-gli-sport/running/giacche-antivento-running-donna',
+    impermeabile:      'https://www.decathlon.it/tutti-gli-sport/running/giacche-impermeabili-running-donna',
+    felpa:             'https://www.decathlon.it/tutti-gli-sport/running/giacche-calde-e-felpe-running-donna',
+    calzini:           'https://www.decathlon.it/tutti-gli-sport/running/calze-running-donna',
+    guanti:            'https://www.decathlon.it/tutti-gli-sport/running/guanti-running',
+    cappello:          'https://www.decathlon.it/tutti-gli-sport/running/headwear-running',
+    scaldacollo:       'https://www.decathlon.it/tutti-gli-sport/running/scaldacollo-e-buff-running',
+    top:               'https://www.decathlon.it/tutti-gli-sport/running/intimo-running-donna',
+  }
+};
+
+// ============================================================
 // *** AREA AGGIORNAMENTO PRODOTTI ***
 // ============================================================
 // Qui trovi TUTTI i prodotti consigliati dall'app, divisi per
@@ -38,102 +123,144 @@ const PRODOTTI = {
   male: {
 
     // Maglia a maniche lunghe — usata con freddo moderato o fresco
-    maglia_lunga: [
-      { nome: 'Under Armour UA Streaker Zip', url: 'https://www.solarissport.com/collections/abbigliamento-uomo-maglie/products/1271851-907' },
-      { nome: 'Asics Lite Show LS 1', url: 'https://www.solarissport.com/products/124756-8052' },
-      { nome: 'Nike Element Sphere HZ', url: 'https://www.solarissport.com/products/683906-011' },
+      maglia_lunga: [
+      // Prodotti Solaris commentati in attesa di eventuale collaborazione futura
+      // { nome: 'Under Armour UA Streaker Zip', url: 'https://www.solarissport.com/collections/abbigliamento-uomo-maglie/products/1271851-907' },
+      // { nome: 'Asics Lite Show LS 1', url: 'https://www.solarissport.com/products/124756-8052' },
+      // { nome: 'Nike Element Sphere HZ', url: 'https://www.solarissport.com/products/683906-011' },
+      { nome: 'Misterrunning — Maglie Maniche Lunghe Uomo', url: MR.male.maglia_lunga },
+      { nome: 'Decathlon — Maglie Maniche Lunghe Running Uomo', url: DEC.male.maglia_lunga },
     ],
 
     // Leggins lunghi — usati con freddo moderato o intenso
     leggins_lunghi: [
-      { nome: 'Under Armour UA HG Armour Novelty', url: 'https://www.solarissport.com/collections/abbigliamento-uomo-leggings/products/1377158-0001' },
-      { nome: 'New Balance Impact Run Tight', url: 'https://www.solarissport.com/collections/abbigliamento-uomo-leggings/products/mp21273-bk' },
-      { nome: 'Nike Pro Dri Fit', url: 'https://www.solarissport.com/collections/abbigliamento-uomo-leggings/products/dm6003-010' },
+      // Prodotti Solaris commentati in attesa di eventuale collaborazione futura
+      // { nome: 'Under Armour UA HG Armour Novelty', url: 'https://www.solarissport.com/collections/abbigliamento-uomo-leggings/products/1377158-0001' },
+      // { nome: 'New Balance Impact Run Tight', url: 'https://www.solarissport.com/collections/abbigliamento-uomo-leggings/products/mp21273-bk' },
+      // { nome: 'Nike Pro Dri Fit', url: 'https://www.solarissport.com/collections/abbigliamento-uomo-leggings/products/dm6003-010' },
+      { nome: 'Misterrunning — Leggins Running Uomo', url: MR.male.leggins_lunghi },
+      { nome: 'Decathlon — Leggins Running Uomo', url: DEC.male.leggins_lunghi },
     ],
 
     // Guanti — consigliati sotto i 7°C percepiti
     guanti: [
-      { nome: 'Asics Gloves', url: 'https://www.solarissport.com/collections/accessori-uomo-guanti/products/3013a188-001' },
-      { nome: 'Mizuno BT Light Weight Glove', url: 'https://www.solarissport.com/products/73xbk052c-09' },
-      { nome: 'Runtastic Sport Gloves', url: 'https://www.solarissport.com/collections/accessori-uomo-guanti/products/rungls1' },
+      // Prodotti Solaris commentati in attesa di eventuale collaborazione futura
+      // { nome: 'Asics Gloves', url: 'https://www.solarissport.com/collections/accessori-uomo-guanti/products/3013a188-001' },
+      // { nome: 'Mizuno BT Light Weight Glove', url: 'https://www.solarissport.com/products/73xbk052c-09' },
+      // { nome: 'Runtastic Sport Gloves', url: 'https://www.solarissport.com/collections/accessori-uomo-guanti/products/rungls1' },
+      { nome: 'Misterrunning — Guanti Running', url: MR.male.guanti },
+      { nome: 'Decathlon — Guanti Running', url: DEC.male.guanti },
     ],
 
     // Termica leggera — primo strato con freddo moderato (1-7°C percepiti)
-    termica_leggera: [
-      { nome: 'Under Armour UA CG Armour Comp Mock', url: 'https://www.solarissport.com/products/1366072-0410' },
-      { nome: 'Mizuno Light Weight Crew Neck', url: 'https://www.solarissport.com/products/73cf281-9' },
-      { nome: 'Nike M NK Elmnt Track Top HZ', url: 'https://www.solarissport.com/products/bv5419-010' },
+        termica_leggera: [
+      // Prodotti Solaris commentati in attesa di eventuale collaborazione futura
+      // { nome: 'Under Armour UA CG Armour Comp Mock', url: 'https://www.solarissport.com/products/1366072-0410' },
+      // { nome: 'Mizuno Light Weight Crew Neck', url: 'https://www.solarissport.com/products/73cf281-9' },
+      // { nome: 'Nike M NK Elmnt Track Top HZ', url: 'https://www.solarissport.com/products/bv5419-010' },
+      { nome: 'Misterrunning — Intimo Termico Uomo', url: MR.male.termica_leggera },
+      { nome: 'Decathlon — Maglietta Termica Uomo', url: DEC.male.termica_leggera },
     ],
 
     // Termica invernale — primo strato con freddo intenso (sotto 0°C percepiti)
     termica_invernale: [
-      { nome: 'Accapi Maglia ML Polar Bear', url: 'https://www.solarissport.com/products/a740-966' },
+      // Prodotti Solaris commentati in attesa di eventuale collaborazione futura
+      // { nome: 'Accapi Maglia ML Polar Bear', url: 'https://www.solarissport.com/products/a740-966' },
       { nome: 'Biotex Manica Lunga 3D', url: 'https://www.biotex.it/shop/it/uomo/211-manica-lunga-3d/116' },
       { nome: 'UYN Evolutyon+', url: 'https://uynsports.com/it-it/products/maglia-termica-dolcevita-evolutyon-uomo-nero-sx2-u100555-b000' },
+      { nome: 'Misterrunning — Intimo Termico Uomo', url: MR.male.termica_invernale },
+      { nome: 'Decathlon — Maglietta Termica Uomo', url: DEC.male.termica_invernale },
     ],
 
     // Giacca antivento — usata con vento forte o temperature fresche
     antivento: [
-      { nome: 'The North Face M Higher Run Wind Jacket', url: 'https://www.solarissport.com/products/8727-4h0' },
-      { nome: 'Under Armour Run Insulate Hybrid Jacket', url: 'https://www.solarissport.com/products/1355807-0001' },
-      { nome: 'Brooks Run Visible Jacket 2.0', url: 'https://www.solarissport.com/products/211519-167' },
+      // Prodotti Solaris commentati in attesa di eventuale collaborazione futura
+      // { nome: 'The North Face M Higher Run Wind Jacket', url: 'https://www.solarissport.com/products/8727-4h0' },
+      // { nome: 'Under Armour Run Insulate Hybrid Jacket', url: 'https://www.solarissport.com/products/1355807-0001' },
+      // { nome: 'Brooks Run Visible Jacket 2.0', url: 'https://www.solarissport.com/products/211519-167' },
+      { nome: 'Misterrunning — Giacche Antivento Uomo', url: MR.male.antivento },
+      { nome: 'Decathlon — Giacche Antivento Running Uomo', url: DEC.male.antivento },
     ],
 
     // Giacca impermeabile — consigliata quando piove
     impermeabile: [
-      { nome: 'New Balance Better Run Waterproof Jacket', url: 'https://www.solarissport.com/products/mo53207-gym' },
-      { nome: 'New Balance Impact Run Water Defy Jacket', url: 'https://www.solarissport.com/products/mj21266-bk' },
-      { nome: 'Under Armour Storm Run Hooded Jacket', url: 'https://www.solarissport.com/products/1376795-0001' },
+      // Prodotti Solaris commentati in attesa di eventuale collaborazione futura
+      // { nome: 'New Balance Better Run Waterproof Jacket', url: 'https://www.solarissport.com/products/mo53207-gym' },
+      // { nome: 'New Balance Impact Run Water Defy Jacket', url: 'https://www.solarissport.com/products/mj21266-bk' },
+      // { nome: 'Under Armour Storm Run Hooded Jacket', url: 'https://www.solarissport.com/products/1376795-0001' },
+      { nome: 'Misterrunning — Giacche Impermeabili Uomo', url: MR.male.impermeabile },
+      { nome: 'Decathlon — Giacche Impermeabili Running Uomo', url: DEC.male.impermeabile },
     ],
 
     // Cappello / fascia orecchie — consigliata sotto i 4°C percepiti
     cappello: [
-      { nome: 'Mizuno BT Headband', url: 'https://www.solarissport.com/products/a2gw9552-09' },
-      { nome: 'Kiprun Fascia Running Unisex', url: 'https://www.decathlon.it/p/fascia-running-adulto-unisex-nera/352680/c382m8871353' },
-      { nome: 'Kiprun Berretto Running Warm+ V2', url: 'https://www.decathlon.it/p/berretto-running-adulto-warm-v2-nero/352660/c382m8871314' },
+      // Prodotti Solaris commentati in attesa di eventuale collaborazione futura
+      // { nome: 'Mizuno BT Headband', url: 'https://www.solarissport.com/products/a2gw9552-09' },
+      // { nome: 'Kiprun Fascia Running Unisex', url: 'https://www.decathlon.it/p/fascia-running-adulto-unisex-nera/352680/c382m8871353' },
+      // { nome: 'Kiprun Berretto Running Warm+ V2', url: 'https://www.decathlon.it/p/berretto-running-adulto-warm-v2-nero/352660/c382m8871314' },
+      { nome: 'Misterrunning — Berretti Running', url: MR.male.cappello },
+      { nome: 'Decathlon — Headwear Running', url: DEC.male.cappello },
     ],
 
     // Scaldacollo — consigliato con freddo intenso (sotto 0°C percepiti)
     scaldacollo: [
-      { nome: 'Mizuno BT Neck Warmer Panel', url: 'https://www.solarissport.com/products/a2gwa570-09' },
-      { nome: 'Barts Col', url: 'https://www.solarissport.com/products/108-1' },
+      // Prodotti Solaris commentati in attesa di eventuale collaborazione futura
+      // { nome: 'Mizuno BT Neck Warmer Panel', url: 'https://www.solarissport.com/products/a2gwa570-09' },
+      // { nome: 'Barts Col', url: 'https://www.solarissport.com/products/108-1' },
+      { nome: 'Misterrunning — Scaldacollo Running', url: MR.male.scaldacollo },
+      { nome: 'Decathlon — Scaldacollo Running', url: DEC.male.scaldacollo },
     ],
 
     // Maglia tecnica maniche corte — usata con temperature miti o calde
     maglia_corta: [
       { nome: 'Fessura Shirt T-01', url: 'https://www.fessura.com/products/shirt-t-01', sconto: 'MASSIMI20' },
-      { nome: 'Adidas Own The Run Tee', url: 'https://www.solarissport.com/products/hb7448' },
-      { nome: 'Asics Icon SS Top', url: 'https://www.solarissport.com/products/2011b055-301' },
-      { nome: 'New Balance Run T-Shirt', url: 'https://www.solarissport.com/products/mt41253-bk' },
-      { nome: 'Under Armour UA HG Armour Comp SS', url: 'https://www.solarissport.com/products/1361518-0100' },
+      // Prodotti Solaris commentati in attesa di eventuale collaborazione futura
+      // { nome: 'Adidas Own The Run Tee', url: 'https://www.solarissport.com/products/hb7448' },
+      // { nome: 'Asics Icon SS Top', url: 'https://www.solarissport.com/products/2011b055-301' },
+      // { nome: 'New Balance Run T-Shirt', url: 'https://www.solarissport.com/products/mt41253-bk' },
+      // { nome: 'Under Armour UA HG Armour Comp SS', url: 'https://www.solarissport.com/products/1361518-0100' },
+      { nome: 'Misterrunning — Magliette Running Uomo', url: MR.male.maglia_corta },
+      { nome: 'Decathlon — T-Shirt Running Uomo', url: DEC.male.maglia_corta },
     ],
 
     // Pantaloncini corti — usati con caldo intenso (oltre 20°C percepiti)
     shorts: [
       { nome: 'Fessura Kit304', url: 'https://www.fessura.com/products/kit304-6-26i-kit30401-0', sconto: 'MASSIMI20' },
-      { nome: 'Adidas Designed 4 Running', url: 'https://www.solarissport.com/products/h58578' },
-      { nome: 'Under Armour UA Run Anywhere Short', url: 'https://www.solarissport.com/products/1376504-0006' },
-      { nome: 'Nike Dri-Fit Run Division', url: 'https://www.solarissport.com/products/dm4807-010' },
+      // Prodotti Solaris commentati in attesa di eventuale collaborazione futura
+      // { nome: 'Adidas Designed 4 Running', url: 'https://www.solarissport.com/products/h58578' },
+      // { nome: 'Under Armour UA Run Anywhere Short', url: 'https://www.solarissport.com/products/1376504-0006' },
+      // { nome: 'Nike Dri-Fit Run Division', url: 'https://www.solarissport.com/products/dm4807-010' },
+      { nome: 'Misterrunning — Pantaloncini Running Uomo', url: MR.male.shorts },
+      { nome: 'Decathlon — Pantaloncini Running Uomo', url: DEC.male.shorts },
     ],
 
     // Calzini tecnici corti — consigliati sempre
     calzini: [
       { nome: 'Fessura Socks T-01', url: 'https://www.fessura.com/products/socks-t-01', sconto: 'MASSIMI20' },
-      { nome: 'GM Run Training', url: 'https://www.solarissport.com/products/2404-09' },
-      { nome: 'Asics Performance Run Sock Crew', url: 'https://www.solarissport.com/products/3013b002-750' },
-      { nome: 'BV Sport Socquette Scrone Evo', url: 'https://www.solarissport.com/products/208-002' },
+      // Prodotti Solaris commentati in attesa di eventuale collaborazione futura
+      // { nome: 'GM Run Training', url: 'https://www.solarissport.com/products/2404-09' },
+      // { nome: 'Asics Performance Run Sock Crew', url: 'https://www.solarissport.com/products/3013b002-750' },
+      // { nome: 'BV Sport Socquette Scrone Evo', url: 'https://www.solarissport.com/products/208-002' },
+      { nome: 'Misterrunning — Calzini Running', url: MR.male.calzini },
+      { nome: 'Decathlon — Calzini Running Uomo', url: DEC.male.calzini },
     ],
 
     // Leggins corti / shorts compressione — usati con temperature miti (15-20°C)
     leggins_corti: [
-      { nome: 'Under Armour HG Armour Lng Shorts', url: 'https://www.solarissport.com/products/1361602-0001' },
-      { nome: 'New Balance Q Speed Fuel 2in1 Short', url: 'https://www.solarissport.com/products/ms11279-nse' },
-      { nome: 'Nike M NP Brt Short', url: 'https://www.solarissport.com/products/cj4787-010' },
+      // Prodotti Solaris commentati in attesa di eventuale collaborazione futura
+      // { nome: 'Under Armour HG Armour Lng Shorts', url: 'https://www.solarissport.com/products/1361602-0001' },
+      // { nome: 'New Balance Q Speed Fuel 2in1 Short', url: 'https://www.solarissport.com/products/ms11279-nse' },
+      // { nome: 'Nike M NP Brt Short', url: 'https://www.solarissport.com/products/cj4787-010' },
+      { nome: 'Misterrunning — Pantaloncini Compression Uomo', url: MR.male.leggins_corti },
+      { nome: 'Decathlon — Corsari Running Uomo', url: DEC.male.leggins_corti },
     ],
 
     // Felpa leggera — consigliata solo con ritmo lento e temperature miti
     felpa: [
-      { nome: 'Abbigliamento Uomo Felpe', url: 'https://www.solarissport.com/collections/abbigliamento-uomo-felpe' },
+      // Prodotti Solaris commentati in attesa di eventuale collaborazione futura
+      // { nome: 'Abbigliamento Uomo Felpe', url: 'https://www.solarissport.com/collections/abbigliamento-uomo-felpe' },
+      { nome: 'Misterrunning — Felpe Running Uomo', url: MR.male.felpa },
+      { nome: 'Decathlon — Felpe Running Uomo', url: DEC.male.felpa },
     ],
   },
 
@@ -145,109 +272,154 @@ const PRODOTTI = {
 
     // Maglia a maniche lunghe — usata con freddo moderato o fresco
     maglia_lunga: [
-      { nome: 'Mizuno Vortex Warmalite HZ Shirt', url: 'https://www.solarissport.com/products/j2gc8734-19' },
-      { nome: 'Under Armour UA Outrun The Cold LS', url: 'https://www.solarissport.com/collections/abbigliamento-donna-maglie/products/1373208-0469' },
-      { nome: 'Asics Seamless LS', url: 'https://www.solarissport.com/products/134610-0640' },
-      { nome: 'Nike W NK ZNL CL Relay Top', url: 'https://www.solarissport.com/products/831514-010' },
+      // Prodotti Solaris commentati in attesa di eventuale collaborazione futura
+      // { nome: 'Mizuno Vortex Warmalite HZ Shirt', url: 'https://www.solarissport.com/products/j2gc8734-19' },
+      // { nome: 'Under Armour UA Outrun The Cold LS', url: 'https://www.solarissport.com/collections/abbigliamento-donna-maglie/products/1373208-0469' },
+      // { nome: 'Asics Seamless LS', url: 'https://www.solarissport.com/products/134610-0640' },
+      // { nome: 'Nike W NK ZNL CL Relay Top', url: 'https://www.solarissport.com/products/831514-010' },
+      { nome: 'Misterrunning — Maglie Maniche Lunghe Donna', url: MR.female.maglia_lunga },
+      { nome: 'Decathlon — Maglie Maniche Lunghe Running Donna', url: DEC.female.maglia_lunga },
     ],
 
     // Leggins lunghi — usati con freddo moderato o intenso
     leggins_lunghi: [
-      { nome: 'Under Armour Heatgear Mesh Legging', url: 'https://www.solarissport.com/collections/abbigliamento-donna-leggings/products/6010009-0008' },
-      { nome: 'New Balance AC Legging 25', url: 'https://www.solarissport.com/collections/abbigliamento-donna-leggings/products/wb6160e1-bk' },
-      { nome: 'Adidas TF Stash 1/1 L', url: 'https://www.solarissport.com/collections/abbigliamento-donna-leggings/products/it2282' },
-      { nome: 'Brooks High Point Tight', url: 'https://www.solarissport.com/collections/abbigliamento-donna-leggings/products/221682-450' },
+      // Prodotti Solaris commentati in attesa di eventuale collaborazione futura
+      // { nome: 'Under Armour Heatgear Mesh Legging', url: 'https://www.solarissport.com/collections/abbigliamento-donna-leggings/products/6010009-0008' },
+      // { nome: 'New Balance AC Legging 25', url: 'https://www.solarissport.com/collections/abbigliamento-donna-leggings/products/wb6160e1-bk' },
+      // { nome: 'Adidas TF Stash 1/1 L', url: 'https://www.solarissport.com/collections/abbigliamento-donna-leggings/products/it2282' },
+      // { nome: 'Brooks High Point Tight', url: 'https://www.solarissport.com/collections/abbigliamento-donna-leggings/products/221682-450' },
+      { nome: 'Misterrunning — Leggins Running Donna', url: MR.female.leggins_lunghi },
+      { nome: 'Decathlon — Leggins Running Donna', url: DEC.female.leggins_lunghi },
     ],
 
     // Guanti — consigliati sotto i 7°C percepiti
     guanti: [
-      { nome: 'Kiprun Guanti Running Evolutiv V2', url: 'https://www.decathlon.it/p/guanti-running-adulto-unisex-evolutiv-v2-neri/340804/c382m8759614' },
-      { nome: 'Mizuno BT Light Weight Glove', url: 'https://www.solarissport.com/products/73xbk052c-09' },
-      { nome: 'Runtastic Sport Gloves', url: 'https://www.solarissport.com/collections/accessori-uomo-guanti/products/rungls1' },
+      // { nome: 'Kiprun Guanti Running Evolutiv V2', url: 'https://www.decathlon.it/p/guanti-running-adulto-unisex-evolutiv-v2-neri/340804/c382m8759614' },
+      // Prodotti Solaris commentati in attesa di eventuale collaborazione futura
+      // { nome: 'Mizuno BT Light Weight Glove', url: 'https://www.solarissport.com/products/73xbk052c-09' },
+      // { nome: 'Runtastic Sport Gloves', url: 'https://www.solarissport.com/collections/accessori-uomo-guanti/products/rungls1' },
+      { nome: 'Misterrunning — Guanti Running', url: MR.female.guanti },
+      { nome: 'Decathlon — Guanti Running', url: DEC.female.guanti },
     ],
 
     // Termica leggera — primo strato con freddo moderato (1-7°C percepiti)
     termica_leggera: [
-      { nome: 'Nike W NP Top SS', url: 'https://www.solarissport.com/products/725745-343' },
-      { nome: 'Kiprun Maglia Termica Running Skincare', url: 'https://www.decathlon.it/p/maglia-termica-running-donna-kiprun-skincare-nera/336832/c382c382m8751028' },
-      { nome: 'Mizuno BT Mid Weight Tee WOS', url: 'https://www.solarissport.com/collections/abbigliamento-donna-t-shirt/products/a2ga0753-01' },
+      // { nome: 'Kiprun Maglia Termica Running Skincare', url: 'https://www.decathlon.it/p/maglia-termica-running-donna-kiprun-skincare-nera/336832/c382c382m8751028' },
+      // Prodotti Solaris commentati in attesa di eventuale collaborazione futura
+      // { nome: 'Nike W NP Top SS', url: 'https://www.solarissport.com/products/725745-343' },
+      // { nome: 'Mizuno BT Mid Weight Tee WOS', url: 'https://www.solarissport.com/collections/abbigliamento-donna-t-shirt/products/a2ga0753-01' },
+      { nome: 'Misterrunning — Intimo Termico Donna', url: MR.female.termica_leggera },
+      { nome: 'Decathlon — Maglietta Termica Donna', url: DEC.female.termica_leggera },
     ],
 
     // Termica invernale — primo strato con freddo intenso (sotto 0°C percepiti)
     termica_invernale: [
-      { nome: 'Under Armour CG Fitted Mock WM', url: 'https://www.solarissport.com/collections/abbigliamento-donna-t-shirt/products/1215968-100' },
       { nome: 'Biotex Manica Lunga 3D', url: 'https://www.biotex.it/shop/it/uomo/211-manica-lunga-3d/116' },
-      { nome: 'Mizuno BT Mid W LS C Neck Shirt WOS', url: 'https://www.solarissport.com/collections/abbigliamento-donna-t-shirt/products/73cl151-09' },
+      // Prodotti Solaris commentati in attesa di eventuale collaborazione futura
+      // { nome: 'Under Armour CG Fitted Mock WM', url: 'https://www.solarissport.com/collections/abbigliamento-donna-t-shirt/products/1215968-100' },
+      // { nome: 'Mizuno BT Mid W LS C Neck Shirt WOS', url: 'https://www.solarissport.com/collections/abbigliamento-donna-t-shirt/products/73cl151-09' },
+      { nome: 'Misterrunning — Intimo Termico Donna', url: MR.female.termica_invernale },
+      { nome: 'Decathlon — Maglietta Termica Donna', url: DEC.female.termica_invernale },
     ],
 
     // Giacca antivento — usata con vento forte o temperature fresche
     antivento: [
-      { nome: 'Brooks Run Visible Jacket 2.0', url: 'https://www.solarissport.com/collections/abbigliamento-donna-giacche/products/221689-167' },
-      { nome: 'Asics Metarun Waterproof Jacket', url: 'https://www.solarissport.com/collections/abbigliamento-donna-giacche/products/2012d092-500' },
-      { nome: 'Brooks High Point Waterproof Jacket', url: 'https://www.solarissport.com/collections/abbigliamento-donna-giacche/products/221608-761' },
+      // Prodotti Solaris commentati in attesa di eventuale collaborazione futura
+      // { nome: 'Brooks Run Visible Jacket 2.0', url: 'https://www.solarissport.com/collections/abbigliamento-donna-giacche/products/221689-167' },
+      // { nome: 'Asics Metarun Waterproof Jacket', url: 'https://www.solarissport.com/collections/abbigliamento-donna-giacche/products/2012d092-500' },
+      // { nome: 'Brooks High Point Waterproof Jacket', url: 'https://www.solarissport.com/collections/abbigliamento-donna-giacche/products/221608-761' },
+      { nome: 'Misterrunning — Giacche Antivento Donna', url: MR.female.antivento },
+      { nome: 'Decathlon — Giacche Antivento Running Donna', url: DEC.female.antivento },
     ],
 
     // Giacca impermeabile — consigliata quando piove
     impermeabile: [
-      { nome: 'Adidas W MT 2L Rain JK', url: 'https://www.solarissport.com/collections/abbigliamento-donna-giacche/products/jn8813' },
-      { nome: 'Brooks High Point Waterproof Jacket', url: 'https://www.solarissport.com/collections/abbigliamento-donna-giacche/products/221608-761' },
-      { nome: 'Asics Metarun Waterproof Jacket', url: 'https://www.solarissport.com/collections/abbigliamento-donna-giacche/products/2012d092-500' },
+      // Prodotti Solaris commentati in attesa di eventuale collaborazione futura
+      // { nome: 'Adidas W MT 2L Rain JK', url: 'https://www.solarissport.com/collections/abbigliamento-donna-giacche/products/jn8813' },
+      // { nome: 'Brooks High Point Waterproof Jacket', url: 'https://www.solarissport.com/collections/abbigliamento-donna-giacche/products/221608-761' },
+      // { nome: 'Asics Metarun Waterproof Jacket', url: 'https://www.solarissport.com/collections/abbigliamento-donna-giacche/products/2012d092-500' },
+      { nome: 'Misterrunning — Giacche Impermeabili Donna', url: MR.female.impermeabile },
+      { nome: 'Decathlon — Giacche Impermeabili Running Donna', url: DEC.female.impermeabile },
     ],
 
     // Cappello / fascia orecchie — consigliata sotto i 4°C percepiti
     cappello: [
-      { nome: 'Mizuno BT Headband', url: 'https://www.solarissport.com/products/a2gw9552-09' },
-      { nome: 'Kiprun Fascia Running Unisex', url: 'https://www.decathlon.it/p/fascia-running-adulto-unisex-nera/352680/c382m8871353' },
-      { nome: 'Kiprun Berretto Running Warm+ V2', url: 'https://www.decathlon.it/p/berretto-running-adulto-warm-v2-nero/352660/c382m8871314' },
+      // Prodotti Solaris commentati in attesa di eventuale collaborazione futura
+      // { nome: 'Mizuno BT Headband', url: 'https://www.solarissport.com/products/a2gw9552-09' },
+      // { nome: 'Kiprun Fascia Running Unisex', url: 'https://www.decathlon.it/p/fascia-running-adulto-unisex-nera/352680/c382m8871353' },
+      // { nome: 'Kiprun Berretto Running Warm+ V2', url: 'https://www.decathlon.it/p/berretto-running-adulto-warm-v2-nero/352660/c382m8871314' },
+      { nome: 'Misterrunning — Berretti Running', url: MR.female.cappello },
+      { nome: 'Decathlon — Headwear Running', url: DEC.female.cappello },
     ],
 
     // Scaldacollo — consigliato con freddo intenso (sotto 0°C percepiti)
     scaldacollo: [
-      { nome: 'Mizuno BT Neck Warmer Panel', url: 'https://www.solarissport.com/products/a2gwa570-09' },
-      { nome: 'Barts Col', url: 'https://www.solarissport.com/products/108-1' },
+      // Prodotti Solaris commentati in attesa di eventuale collaborazione futura
+      // { nome: 'Mizuno BT Neck Warmer Panel', url: 'https://www.solarissport.com/products/a2gwa570-09' },
+      // { nome: 'Barts Col', url: 'https://www.solarissport.com/products/108-1' },
+      { nome: 'Misterrunning — Scaldacollo Running', url: MR.female.scaldacollo },
+      { nome: 'Decathlon — Scaldacollo Running', url: DEC.female.scaldacollo },
     ],
 
     // Maglia tecnica maniche corte — usata con temperature miti o calde
     maglia_corta: [
       { nome: 'Fessura Shirt T-01', url: 'https://www.fessura.com/products/shirt-t-01', sconto: 'MASSIMI20' },
-      { nome: 'New Balance Sports Essentials T-Shirt', url: 'https://www.solarissport.com/collections/abbigliamento-donna-t-shirt/products/wt41222-afg' },
-      { nome: 'Under Armour UA Velociti Shortsleeve', url: 'https://www.solarissport.com/collections/abbigliamento-donna-t-shirt/products/6009540-0824' },
-      { nome: 'Under Armour Tech Knockout Tank', url: 'https://www.solarissport.com/collections/abbigliamento-donna-t-shirt/products/1389851-0498' },
+      // Prodotti Solaris commentati in attesa di eventuale collaborazione futura
+      // { nome: 'New Balance Sports Essentials T-Shirt', url: 'https://www.solarissport.com/collections/abbigliamento-donna-t-shirt/products/wt41222-afg' },
+      // { nome: 'Under Armour UA Velociti Shortsleeve', url: 'https://www.solarissport.com/collections/abbigliamento-donna-t-shirt/products/6009540-0824' },
+      // { nome: 'Under Armour Tech Knockout Tank', url: 'https://www.solarissport.com/collections/abbigliamento-donna-t-shirt/products/1389851-0498' },
+      { nome: 'Misterrunning — Magliette Running Donna', url: MR.female.maglia_corta },
+      { nome: 'Decathlon — T-Shirt Running Donna', url: DEC.female.maglia_corta },
     ],
 
     // Pantaloncini corti — usati con caldo intenso (oltre 20°C percepiti)
     shorts: [
       { nome: 'Fessura Kit304', url: 'https://www.fessura.com/products/kit304-6-26i-kit30401-0', sconto: 'MASSIMI20' },
-      { nome: 'New Balance Sport Essentials 2-in-1 Short', url: 'https://www.solarissport.com/collections/abbigliamento-donna-pantaloni/products/ws41225-bk' },
-      { nome: 'Under Armour UA Fly By 3in Shorts', url: 'https://www.solarissport.com/collections/abbigliamento-donna-pantaloni/products/1382438-0520' },
-      { nome: 'Asics Nagino Run Adjustable 4in Short', url: 'https://www.solarissport.com/collections/abbigliamento-donna-pantaloni/products/2012d141-500' },
+      // Prodotti Solaris commentati in attesa di eventuale collaborazione futura
+      // { nome: 'New Balance Sport Essentials 2-in-1 Short', url: 'https://www.solarissport.com/collections/abbigliamento-donna-pantaloni/products/ws41225-bk' },
+      // { nome: 'Under Armour UA Fly By 3in Shorts', url: 'https://www.solarissport.com/collections/abbigliamento-donna-pantaloni/products/1382438-0520' },
+      // { nome: 'Asics Nagino Run Adjustable 4in Short', url: 'https://www.solarissport.com/collections/abbigliamento-donna-pantaloni/products/2012d141-500' },
+      { nome: 'Misterrunning — Pantaloncini Running Donna', url: MR.female.shorts },
+      { nome: 'Decathlon — Pantaloncini Running Donna', url: DEC.female.shorts },
     ],
 
     // Calzini tecnici corti — consigliati sempre
     calzini: [
       { nome: 'Fessura Socks T-01', url: 'https://www.fessura.com/products/socks-t-01', sconto: 'MASSIMI20' },
-      { nome: 'GM Run Training', url: 'https://www.solarissport.com/products/2404-09' },
-      { nome: 'BV Sport Socquette Californie', url: 'https://www.solarissport.com/products/292-039' },
-      { nome: 'BV Sport Socquette Scrone Evo', url: 'https://www.solarissport.com/products/208-002' },
+      // Prodotti Solaris commentati in attesa di eventuale collaborazione futura
+      // { nome: 'GM Run Training', url: 'https://www.solarissport.com/products/2404-09' },
+      // { nome: 'BV Sport Socquette Californie', url: 'https://www.solarissport.com/products/292-039' },
+      // { nome: 'BV Sport Socquette Scrone Evo', url: 'https://www.solarissport.com/products/208-002' },
+      { nome: 'Misterrunning — Calzini Running', url: MR.female.calzini },
+      { nome: 'Decathlon — Calzini Running Donna', url: DEC.female.calzini },
     ],
 
     // Leggins corti / shorts compressione — usati con temperature miti (15-20°C)
     leggins_corti: [
-      { nome: 'Adidas ESS Shorts', url: 'https://www.solarissport.com/collections/abbigliamento-donna-pantaloni/products/jy0079' },
-      { nome: 'Under Armour UA Velociti 6in Fitted Short', url: 'https://www.solarissport.com/collections/abbigliamento-donna-pantaloni/products/6009498-0001' },
-      { nome: 'New Balance NB Harmony High Rise Short 6', url: 'https://www.solarissport.com/collections/abbigliamento-donna-pantaloni/products/ws51114-abj' },
+      // Prodotti Solaris commentati in attesa di eventuale collaborazione futura
+      // { nome: 'Adidas ESS Shorts', url: 'https://www.solarissport.com/collections/abbigliamento-donna-pantaloni/products/jy0079' },
+      // { nome: 'Under Armour UA Velociti 6in Fitted Short', url: 'https://www.solarissport.com/collections/abbigliamento-donna-pantaloni/products/6009498-0001' },
+      // { nome: 'New Balance NB Harmony High Rise Short 6', url: 'https://www.solarissport.com/collections/abbigliamento-donna-pantaloni/products/ws51114-abj' },
+      { nome: 'Misterrunning — Pantaloncini Compression Donna', url: MR.female.leggins_corti },
+      { nome: 'Decathlon — Corsari Running Donna', url: DEC.female.leggins_corti },
     ],
 
     // Top sportivo — strato base per le donne con temperature miti o calde
     top: [
-      { nome: 'Freddy Top', url: 'https://www.solarissport.com/products/s9wtbb1-n' },
-      { nome: 'New Balance Shape Shield Crop Bra', url: 'https://www.solarissport.com/products/wb21110-bk' },
-      { nome: 'Under Armour UA Crossback Mid Bra', url: 'https://www.solarissport.com/products/1361034-0695' },
+      // Prodotti Solaris commentati in attesa di eventuale collaborazione futura
+      // { nome: 'Freddy Top', url: 'https://www.solarissport.com/products/s9wtbb1-n' },
+      // { nome: 'New Balance Shape Shield Crop Bra', url: 'https://www.solarissport.com/products/wb21110-bk' },
+      // { nome: 'Under Armour UA Crossback Mid Bra', url: 'https://www.solarissport.com/products/1361034-0695' },
+      { nome: 'Misterrunning — Top e Reggiseni Sportivi Donna', url: MR.female.top },
+      { nome: 'Decathlon — Intimo Running Donna', url: DEC.female.top },
     ],
 
     // Felpa leggera — consigliata solo con ritmo lento e temperature miti
     felpa: [
-      { nome: 'Abbigliamento Donna Felpe', url: 'https://www.solarissport.com/collections/abbigliamento-donna-felpe' },
+      // Prodotti Solaris commentati in attesa di eventuale collaborazione futura
+      // { nome: 'Abbigliamento Donna Felpe', url: 'https://www.solarissport.com/collections/abbigliamento-donna-felpe' },
+      { nome: 'Misterrunning — Felpe Running Donna', url: MR.female.felpa },
+      { nome: 'Decathlon — Felpe Running Donna', url: DEC.female.felpa },
     ],
   }
 };
