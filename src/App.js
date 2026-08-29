@@ -449,25 +449,34 @@ const SCARPE = {
     // Lento / rigenerativo — massima ammortizzazione per recupero
     slow: [
       { nome: 'Fessura Speed 01 Jacquard Navy', url: 'https://www.fessura.com/products/speed-01-jacquard-navy', sconto: 'MASSIMI20' },
-      { nome: 'Brooks Ghost 17', url: 'https://www.solarissport.com/products/1104421d-454' },
-      { nome: 'Asics Gel-Nimbus 27', url: 'https://www.solarissport.com/products/1011b958-006' },
-      { nome: 'New Balance 1080', url: 'https://www.solarissport.com/products/m1080-8mp' },
+      // Prodotti Solaris commentati in attesa di eventuale collaborazione futura
+      // { nome: 'Brooks Ghost 17', url: 'https://www.solarissport.com/products/1104421d-454' },
+      // { nome: 'Asics Gel-Nimbus 27', url: 'https://www.solarissport.com/products/1011b958-006' },
+      // { nome: 'New Balance 1080', url: 'https://www.solarissport.com/products/m1080-8mp' },
+      { nome: 'Brooks Ghost 18', url: 'https://www.nencinisport.it/it/brooks-ghost-18.html' },
+      { nome: 'Asics Gel-Nimbus 27', url: 'https://outlet.asics.com/it/it-it/gel-nimbus-27-wide/p/1011B956-002.html' },
+      { nome: 'New Balance 1080', url: 'https://www.misterrunning.com/it/new-balance-1080-v15-scarpe-da-running-uomo-black-slate-grey-m10802fr.html' },
     ],
 
     // Medio — scarpe reattive e versatili per allenamenti quotidiani
     medium: [
       { nome: 'Fessura Speed 05 Violet', url: 'https://www.fessura.com/products/speed-05-violet', sconto: 'MASSIMI20' },
-      { nome: 'Asics Novablast 5', url: 'https://www.solarissport.com/products/1011b974-300' },
+      // Prodotti Solaris commentati in attesa di eventuale collaborazione futura
+      // { nome: 'Asics Novablast 5', url: 'https://www.solarissport.com/products/1011b974-300' },
       { nome: 'Hoka Mach 6', url: 'https://www.cisalfasport.it/it-it/hoka/scarpe-running-mach-6-m-S5881546.html' },
       { nome: 'New Balance FuelCell Rebel V5', url: 'https://www.cisalfasport.it/it-it/new-balance/scarpe-running-fuelcell-rebel-v5-m-S5943593.html' },
+      { nome: 'Asics Novablast 5', url: 'https://outlet.asics.com/it/it-it/novablast-5/p/1011B974-405.html' },
     ],
 
     // Veloce — scarpe leggere e performanti per ritmi sostenuti
     fast: [
       { nome: 'Fessura Race 3 Violet', url: 'https://www.fessura.com/products/race-3-violet', sconto: 'MASSIMI20' },
-      { nome: 'Saucony Endorphin Speed 5', url: 'https://www.solarissport.com/products/s21007-285' },
+      // Prodotti Solaris commentati in attesa di eventuale collaborazione futura
+      // { nome: 'Saucony Endorphin Speed 5', url: 'https://www.solarissport.com/products/s21007-285' },
+      // { nome: 'Adidas SL Evo', url: 'https://www.solarissport.com/products/jp7149' },
       { nome: 'Hoka Mach 7', url: 'https://www.cisalfasport.it/it-it/hoka/scarpe-running-mach-7-m-S5984553.html' },
-      { nome: 'Adidas SL Evo', url: 'https://www.solarissport.com/products/jp7149' },
+      { nome: 'Saucony Endorphin Speed 5', url: 'https://www.nencinisport.it/it/saucony-endorphin-speed-5-3581236.html' },
+      { nome: 'Adidas SL Evo', url: 'https://www.cisalfasport.it/it-it/adidas/scarpe-running-adizero-evo-sl-m-S5954745%7CUNI%7C10.html' },
     ],
 
     // Ripetute o gara — scarpe con piastra in carbonio per massima velocità
@@ -487,25 +496,34 @@ const SCARPE = {
     // Lento / rigenerativo — massima ammortizzazione per recupero
     slow: [
       { nome: 'Fessura Speed 01 Jacquard Navy', url: 'https://www.fessura.com/products/speed-01-jacquard-navy', sconto: 'MASSIMI20' },
-      { nome: 'Brooks Ghost 17', url: 'https://www.solarissport.com/products/1104421d-454' },
-      { nome: 'Asics Gel-Nimbus 27', url: 'https://www.solarissport.com/products/1012b753-300' },
-      { nome: 'New Balance 1080', url: 'https://www.solarissport.com/collections/scarpa-donna-running/products/w1080-815' },
+      // Prodotti Solaris commentati in attesa di eventuale collaborazione futura
+      // { nome: 'Brooks Ghost 17', url: 'https://www.solarissport.com/products/1204311b-070' },
+      // { nome: 'Asics Gel-Nimbus 27', url: 'https://www.solarissport.com/products/1012b753-300' },
+      // { nome: 'New Balance 1080', url: 'https://www.solarissport.com/collections/scarpa-donna-running/products/w1080-815' },
+      { nome: 'Brooks Ghost 18', url: 'https://www.nencinisport.it/it/brooks-ghost-18-woman.html' },
+      { nome: 'Asics Gel-Nimbus 27', url: 'https://outlet.asics.com/it/it-it/gel-nimbus-27/p/1012B753-300.html' },
+      { nome: 'New Balance 1080', url: 'https://www.cisalfasport.it/it-it/new-balance/scarpe-running-1080-v15-w-S5944284.html' },
     ],
 
     // Medio — scarpe reattive e versatili per allenamenti quotidiani
     medium: [
       { nome: 'Fessura Speed 05 Violet', url: 'https://www.fessura.com/products/speed-05-violet', sconto: 'MASSIMI20' },
-      { nome: 'Asics Novablast 5', url: 'https://www.solarissport.com/products/1011b974-300' },
+      // Prodotti Solaris commentati in attesa di eventuale collaborazione futura
+      // { nome: 'Asics Novablast 5', url: 'https://www.solarissport.com/products/1012b765-400' },
       { nome: 'Hoka Mach 6', url: 'https://www.cisalfasport.it/it-it/hoka/scarpe-running-mach-6-w-S5881558.html' },
       { nome: 'New Balance FuelCell Rebel V5', url: 'https://www.cisalfasport.it/it-it/new-balance/scarpe-running-fuelcell-rebel-v5-w-S5944429.html' },
+      { nome: 'Asics Novablast 5', url: 'https://outlet.asics.com/it/it-it/novablast-5/p/1012B765-102.html' },
     ],
 
     // Veloce — scarpe leggere e performanti per ritmi sostenuti
     fast: [
       { nome: 'Fessura Race 3 Violet', url: 'https://www.fessura.com/products/race-3-violet', sconto: 'MASSIMI20' },
-      { nome: 'Saucony Endorphin Speed 5', url: 'https://www.solarissport.com/products/s21007-285' },
+      // Prodotti Solaris commentati in attesa di eventuale collaborazione futura
+      // { nome: 'Saucony Endorphin Speed 5', url: 'https://www.solarissport.com/products/s11007-340' },
+      // { nome: 'Adidas SL Evo', url: 'https://www.solarissport.com/products/jh6208' },
       { nome: 'Hoka Mach 7', url: 'https://www.cisalfasport.it/it-it/hoka/scarpe-running-mach-7-w-S5984606.html' },
-      { nome: 'Adidas SL Evo', url: 'https://www.solarissport.com/products/jh6208' },
+      { nome: 'Saucony Endorphin Speed 5', url: 'https://www.cisalfasport.it/it-it/saucony/scarpe-running-endorphin-speed-5-w-S5992453%7C140%7C6.5.html' },
+      { nome: 'Adidas SL Evo', url: 'https://www.misterrunning.com/it/adidas-adizero-evo-sl-woven-scarpe-da-running-donna-preloved-fig-ki2831.html' },
     ],
 
     // Ripetute o gara — scarpe con piastra in carbonio per massima velocità
@@ -1922,34 +1940,7 @@ async function rilevaMeteomatico() {
           ))}
         </div>
 
-        {/* Mostriamo le note solo se ce ne sono.
-            Ogni nota può essere una semplice stringa oppure un oggetto
-            con testo + link. Controlliamo con "typeof" che tipo è:
-            - typeof n === 'string' → nota semplice, mostriamo solo il testo
-            - altrimenti → nota con link, mostriamo testo + link cliccabile */}
-        {notes.length > 0 && (
-          <div className="notes">
-            {notes.map((n, i) => (
-              <p key={i}>
-                💡 {typeof n === 'string' ? n : (
-                  <>
-                    {n.testo}{' '}
-                      <a
-                      href={n.linkUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="note-link"
-                    >
-                      {n.linkTesto}
-                    </a>
-                  </>
-                )}
-              </p>
-            ))}
-          </div>
-        )}
-
-    {/* Sezione scarpe consigliate in base all'intensità */}
+        {/* Sezione scarpe consigliate in base all'intensità */}
         <div className="shoes-section">
           <p className="section-label">👟 Scarpe consigliate</p>
           <div className="item-card">
@@ -1983,6 +1974,35 @@ async function rilevaMeteomatico() {
           </div>
         </div>
       </div>
+
+        {/* Mostriamo le note solo se ce ne sono.
+            Ogni nota può essere una semplice stringa oppure un oggetto
+            con testo + link. Controlliamo con "typeof" che tipo è:
+            - typeof n === 'string' → nota semplice, mostriamo solo il testo
+            - altrimenti → nota con link, mostriamo testo + link cliccabile */}
+        {notes.length > 0 && (
+          <div className="notes">
+            {notes.map((n, i) => (
+              <p key={i}>
+                💡 {typeof n === 'string' ? n : (
+                  <>
+                    {n.testo}{' '}
+                      <a
+                      href={n.linkUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="note-link"
+                    >
+                      {n.linkTesto}
+                    </a>
+                  </>
+                )}
+              </p>
+            ))}
+          </div>
+        )}
+
+    
 
       {/* Sezione Team di Esperti */}
       <div className="team-section">
