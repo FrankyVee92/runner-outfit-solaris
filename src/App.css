@@ -460,3 +460,32 @@ hr { border: none; border-top: 1px solid #f0f0f0; margin: 1.5rem 0; }
 .team-categoria {
   margin-top: 8px;
 }
+
+/* Input ore e minuti */
+.duration-inputs {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+}
+
+.duration-input-small {
+  width: 45px;
+  padding: 8px 6px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-size: 16px;
+  color: #1a1a1a;
+  background: white;
+  text-align: center;
+}
+
+.duration-input-small:focus {
+  outline: none;
+  border-color: #1565C0;
+}
+
+.duration-label {
+  font-size: 13px;
+  color: #555;
+}

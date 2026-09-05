@@ -1918,27 +1918,48 @@ async function rilevaMeteomatico() {
           rispetto alla barra scorrevole. L'utente digita direttamente i minuti.
           min=15 e max=180 limitano i valori accettabili.
           onChange aggiorna lo stato e salva nel localStorage */}
-        <div className="row-input">
+       {/* Input ore e minuti — l'utente inserisce ore e minuti separatamente
+          e noi convertiamo in minuti totali con la formula (ore * 60) + minuti.
+          Più intuitivo rispetto a inserire i minuti totali direttamente. */}
+      <div className="row-input">
         <label>⏱️ Durata uscita</label>
-        <input
-          type="text"
-          inputMode="numeric"
-          className="duration-input"
-          value={duration}
-          onChange={e => {
-            // Permettiamo solo numeri
-            const val = e.target.value.replace(/[^0-9]/g, '');
-            setDuration(val);
-          }}
-          onBlur={e => {
-            // Quando l'utente esce dal campo applichiamo i limiti
-            const num = Number(e.target.value);
-            if (!num || num < 15) setDuration(15);
-            else if (num > 180) setDuration(180);
-            else setDuration(num);
-          }}
-        />
-        <span className="val">min</span>
+        <div className="duration-inputs">
+          <input
+            type="text"
+            inputMode="numeric"
+            className="duration-input-small"
+            placeholder="0"
+            value={Math.floor(duration / 60)}
+            onChange={e => {
+              // Prendiamo le ore inserite e convertiamo in minuti totali
+              const ore = Number(e.target.value.replace(/[^0-9]/g, '')) || 0;
+              const minuti = duration % 60;
+              const totale = (ore * 60) + minuti;
+              if (totale >= 15 && totale <= 180) setDuration(totale);
+              else if (totale < 15) setDuration(minuti);
+              else setDuration(180);
+            }}
+          />
+          <span className="duration-label">h</span>
+          <input
+            type="text"
+            inputMode="numeric"
+            className="duration-input-small"
+            placeholder="0"
+            value={duration % 60}
+            onChange={e => {
+              // Prendiamo i minuti inseriti e convertiamo in minuti totali
+              const minuti = Number(e.target.value.replace(/[^0-9]/g, '')) || 0;
+              const ore = Math.floor(duration / 60);
+              const totale = (ore * 60) + minuti;
+              if (totale >= 15 && totale <= 180) setDuration(totale);
+              else if (totale < 15) setDuration(15);
+              else setDuration(180);
+            }}
+          />
+          <span className="duration-label">min</span>
+        </div>
+        <span className="val">{duration} min</span>
       </div>
 
       <hr />
