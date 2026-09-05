@@ -58,7 +58,7 @@ const MR = {
     guanti:            'https://www.misterrunning.com/it/guanti/',
     cappello:          'https://www.misterrunning.com/it/berretti/',
     scaldacollo:       'https://www.misterrunning.com/it/scaldacollo/',
-    top:               'https://www.misterrunning.com/it/reggiseno-sportivo-intemo-tecnico-running-donna/',
+    top:               'https://www.misterrunning.com/it/reggiseno-sportivo-intimo-tecnico-running-donna/',
   }
 };
 
@@ -592,7 +592,7 @@ const TEAM = {
     // Numero dell'assistente per prenotare gli appuntamenti
     telefono: '3512605230',
     // Codice da presentare in sede per ottenere lo sconto
-    codice_sconto: 'FrancescoVergaRunChoice',
+    codice_sconto: 'FVergaRunChoice',
     // Percentuale di sconto applicata sulla visita
     sconto: '10%',
   },
@@ -607,7 +607,7 @@ const TEAM = {
     instagram_team: 'https://www.instagram.com/team.performance.it',
     sito: 'https://www.nutridoc.it/nutrizionista/luca-quagliatini',
     telefono: '3512605230',
-    codice_sconto: 'FrancescoVergaRunChoice',
+    codice_sconto: 'FVergaRunChoice',
     sconto: '10%',
   },
 
@@ -624,7 +624,7 @@ const TEAM = {
     // Numero diretto di Luca per prenotare consulenze
     telefono: '3881846001',
     // Stesso codice sconto dei nutrizionisti
-    codice_sconto: 'FrancescoVergaRunChoice',
+    codice_sconto: 'FVergaRunChoice',
     sconto: '10%',
   },
 
@@ -640,12 +640,31 @@ const TEAM = {
     // Numero WhatsApp professionale per prenotare
     telefono: '3394313799',
     // Codice sconto per coupon seduta fisioterapica
-    codice_sconto: 'FrancescoVergaRunChoice',
+    codice_sconto: 'FVergaRunChoice',
     sconto: '10%',
     // App di Luca — Tepy — con codice sconto dedicato
     app_nome: 'Tepy',
     app_url: 'https://tepy.app/',
     app_codice: 'TEPY30',
+  },
+
+  // Endurance Coach — Sara Durazzi, Senigallia
+  // Specializzata in triathlon: nuoto, ciclismo, corsa e mental coaching
+  // Coupon sconto del 10% generabile direttamente dall'app
+  coach: {
+    nome: 'Sara Durazzi',
+    ruolo: 'Endurance Coach — Swim • Bike • Run • Mind',
+    instagram_personale: 'https://www.instagram.com/sarad.coach',
+    instagram_team: null,
+    sito: null,
+    // Nessun numero professionale disponibile
+    telefono: null,
+    // Codice sconto aggiornato alla versione breve
+    codice_sconto: 'FVergaRunChoice',
+    sconto: '10%',
+    app_nome: null,
+    app_url: null,
+    app_codice: null,
   }
 
 };
@@ -1126,6 +1145,118 @@ function generaCouponPDFSquadroni() {
 }
 
 // ============================================================
+// FUNZIONE: generaCouponPDFSara
+// ============================================================
+// Genera il coupon PDF per Sara Durazzi, Endurance Coach.
+// Stessa struttura grafica delle altre funzioni coupon ma con:
+// - Logo SaraD.Coach
+// - Solo link Instagram (nessun telefono o sito)
+// - Colore rosa/gold in linea con il logo di Sara
+// ============================================================
+function generaCouponPDFSara() {
+
+  const doc = new jsPDF('l', 'mm', 'a5');
+  const w = doc.internal.pageSize.getWidth();
+  const h = doc.internal.pageSize.getHeight();
+
+  // Sfondo bianco
+  doc.setFillColor(255, 255, 255);
+  doc.rect(0, 0, w, h, 'F');
+
+  // Bordo tratteggiato esterno
+  doc.setDrawColor(180, 180, 180);
+  doc.setLineWidth(0.3);
+  doc.setLineDashPattern([3, 2], 0);
+  doc.rect(5, 5, w - 10, h - 10);
+  doc.setLineDashPattern([], 0);
+
+  // Striscia rosa in cima — colore logo Sara
+  doc.setFillColor(200, 150, 140);
+  doc.rect(5, 5, w - 10, 8, 'F');
+
+  // Carichiamo i loghi
+  const logoSara = new Image();
+  logoSara.src = '/logo-sarad.png';
+
+  const logoRC = new Image();
+  logoRC.src = '/logo-runchoice.png';
+
+  Promise.all([
+    new Promise(resolve => { logoSara.onload = resolve; logoSara.onerror = resolve; }),
+    new Promise(resolve => { logoRC.onload = resolve; logoRC.onerror = resolve; })
+  ]).then(() => {
+
+    // Logo Sara a sinistra
+    try { doc.addImage(logoSara, 'PNG', 8, 13, 60, 45); } catch(e) {}
+
+    // Logo RunChoice a destra
+    try { doc.addImage(logoRC, 'PNG', w - 35, 18, 25, 25); } catch(e) {}
+
+    // Titolo coupon
+    doc.setFontSize(10);
+    doc.setTextColor(100, 100, 100);
+    doc.setFont('helvetica', 'normal');
+    doc.text('COUPON SCONTO ESCLUSIVO', w / 2, 50, { align: 'center' });
+
+    // Percentuale sconto
+    doc.setFontSize(36);
+    doc.setTextColor(200, 150, 140);
+    doc.setFont('helvetica', 'bold');
+    doc.text(TEAM.coach.sconto, w / 2, 64, { align: 'center' });
+
+    // Testo sotto la percentuale
+    doc.setFontSize(11);
+    doc.setTextColor(50, 50, 50);
+    doc.setFont('helvetica', 'normal');
+    doc.text('sul tuo piano di allenamento con Sara Durazzi', w / 2, 72, { align: 'center' });
+
+    // Box codice sconto
+    doc.setFillColor(245, 245, 245);
+    doc.setDrawColor(200, 200, 200);
+    doc.setLineWidth(0.3);
+    doc.roundedRect(20, 77, w - 40, 18, 3, 3, 'FD');
+
+    // Etichetta codice
+    doc.setFontSize(8);
+    doc.setTextColor(120, 120, 120);
+    doc.text('CODICE SCONTO', w / 2, 83, { align: 'center' });
+
+    // Codice sconto in rosa
+    doc.setFontSize(13);
+    doc.setTextColor(200, 150, 140);
+    doc.setFont('helvetica', 'bold');
+    doc.text(TEAM.coach.codice_sconto, w / 2, 91, { align: 'center' });
+
+    // Linea divisoria tratteggiata
+    doc.setDrawColor(200, 200, 200);
+    doc.setLineWidth(0.3);
+    doc.setLineDashPattern([2, 2], 0);
+    doc.line(10, 100, w - 10, 100);
+    doc.setLineDashPattern([], 0);
+
+    // Nome e ruolo
+    doc.setFontSize(10);
+    doc.setTextColor(50, 50, 50);
+    doc.setFont('helvetica', 'bold');
+    doc.text(TEAM.coach.nome + ' — Endurance Coach', 12, 108);
+
+    // Contatti — solo Instagram
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(200, 150, 140);
+    doc.text('@sarad.coach', 12, 116);
+
+    // Footer
+    doc.setFontSize(8);
+    doc.setTextColor(180, 180, 180);
+    doc.text('Coupon generato da RunChoice', w / 2, h - 8, { align: 'center' });
+
+    // Scarichiamo il PDF
+    doc.save('coupon-sara-durazzi.pdf');
+  });
+}
+
+// ============================================================
 // FUNZIONE: windChill
 // ============================================================
 // Calcola la temperatura percepita tenendo conto del vento.
@@ -1262,7 +1393,9 @@ function computeOutfit(temp, wind, humidity, duration, sensitivity, intensity, s
       items.push({ icon: '👕', label: 'Maglia tecnica maniche corte', products: P.maglia_corta });
     }
     // Chi va piano aggiunge una felpa per non raffreddarsi
-    if (intensity === 'slow') items.push({ icon: '🧥', label: 'Felpa leggera', products: P.felpa });
+    // Felpa leggera solo se fa fresco (sotto i 15°C) e ritmo lento
+// Sopra i 15°C anche con ritmo lento non ha senso indossare una felpa
+if (intensity === 'slow' && perceived <= 15) items.push({ icon: '🧥', label: 'Felpa leggera', products: P.felpa });
     items.push({ icon: '🩳', label: 'Shorts o leggins corti', products: P.leggins_corti });
     items.push({ icon: '🧦', label: 'Calzini tecnici corti', products: P.calzini });
 
@@ -2155,6 +2288,35 @@ async function rilevaMeteomatico() {
           Prenota la tua seduta con Luca e risparmia il 10%!
         </p>
         <button className="coupon-button" onClick={generaCouponPDFSquadroni}>
+          🎟️ Scarica il tuo coupon sconto
+        </button>
+
+      </div>
+
+            {/* Sezione Sara Durazzi — Endurance Coach */}
+      <div className="team-card" style={{marginTop: '1rem'}}>
+
+        {/* Logo e nome */}
+        <div className="team-header">
+          <img src="/logo-sarad.png" alt="SaraD Coach" className="team-logo" />
+          <div>
+            <p className="team-nome">{TEAM.coach.nome}</p>
+            <p className="team-ruolo">{TEAM.coach.ruolo}</p>
+          </div>
+        </div>
+
+        {/* Link social — solo Instagram */}
+        <div className="team-contacts">
+          <a href={TEAM.coach.instagram_personale} target="_blank" rel="noopener noreferrer" className="team-link">
+            📸 @sarad.coach
+          </a>
+        </div>
+
+        {/* Frase coupon e pulsante */}
+        <p className="team-coupon-text">
+          Inizia il tuo percorso di allenamento con Sara e risparmia il 10%!
+        </p>
+        <button className="coupon-button" onClick={generaCouponPDFSara}>
           🎟️ Scarica il tuo coupon sconto
         </button>
 
