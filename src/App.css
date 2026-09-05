@@ -431,3 +431,32 @@ hr { border: none; border-top: 1px solid #f0f0f0; margin: 1.5rem 0; }
   outline: none;
   border-color: #1565C0;
 }
+
+/* Filtri categoria team */
+.team-filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.team-filter-btn {
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+  cursor: pointer;
+  background: white;
+  color: #1a1a1a;
+  transition: all 0.15s;
+}
+
+.team-filter-btn.active {
+  background: #1565C0;
+  color: white;
+  border-color: #1565C0;
+}
+
+.team-categoria {
+  margin-top: 8px;
+}

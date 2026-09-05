@@ -1648,6 +1648,11 @@ export default function App() {
   // Salvato nel localStorage così l'utente non deve reimpostarlo ogni volta
   const [giornoUscita, setGiornoUscita] = useState(() => localStorage.getItem('rc_giorno') || 'oggi');
 
+   // Categoria attiva nella sezione professionisti
+  // null = nessuna categoria selezionata (sezione chiusa)
+  // 'nutrizione', 'preparazione', 'terapie' = categoria aperta
+  const [categoriaAttiva, setCategoriaAttiva] = useState(null);
+
   // ============================================================
   // CALCOLO CONSIGLI
   // ============================================================
@@ -2161,191 +2166,168 @@ async function rilevaMeteomatico() {
 
     
 
-      {/* Sezione Team di Esperti */}
+      {/* Sezione Team di Esperti con filtri per categoria
+          Tre pulsanti che espandono/chiudono la categoria selezionata.
+          categoriaAttiva === null = tutto chiuso
+          categoriaAttiva === 'nutrizione' / 'preparazione' / 'terapie' = categoria aperta */}
       <div className="team-section">
         <p className="section-label">👨‍⚕️ Il nostro team di esperti</p>
 
-        <div className="team-card">
-
-          {/* Logo e nome del professionista */}
-          <div className="team-header">
-            <img src="/logo-performance.png" alt="Performance Center" className="team-logo" />
-            <div>
-              <p className="team-nome">{TEAM.nutrizionista.nome}</p>
-              <p className="team-ruolo">{TEAM.nutrizionista.ruolo}</p>
-            </div>
-          </div>
-
-          {/* Link social e contatti */}
-          <div className="team-contacts">
-            <a href={TEAM.nutrizionista.instagram_personale} target="_blank" rel="noopener noreferrer" className="team-link">
-              📸 @dr.perf0rmance
-            </a>
-            <a href={TEAM.nutrizionista.instagram_team} target="_blank" rel="noopener noreferrer" className="team-link">
-              📸 @team.performance.it
-            </a>
-            <a href={`tel:${TEAM.nutrizionista.telefono}`} className="team-link">
-              📞 351 260 5230
-            </a>
-            <a href={TEAM.nutrizionista.sito} target="_blank" rel="noopener noreferrer" className="team-link">
-              🌐 manuelsalvadori.it
-            </a>
-          </div>
-
-          {/* Frase coupon e pulsante */}
-          <p className="team-coupon-text">
-            Prenota la tua visita con il Team Performance e risparmia il 10%!
-          </p>
-          <button className="coupon-button" onClick={generaCouponPDF}>
-            🎟️ Scarica il tuo coupon sconto
+        {/* Tre pulsanti filtro categoria */}
+        <div className="team-filters">
+          <button
+            className={`team-filter-btn ${categoriaAttiva === 'nutrizione' ? 'active' : ''}`}
+            onClick={() => setCategoriaAttiva(categoriaAttiva === 'nutrizione' ? null : 'nutrizione')}
+          >
+            🥗 Nutrizione
           </button>
-
+          <button
+            className={`team-filter-btn ${categoriaAttiva === 'preparazione' ? 'active' : ''}`}
+            onClick={() => setCategoriaAttiva(categoriaAttiva === 'preparazione' ? null : 'preparazione')}
+          >
+            🏃 Preparazione
+          </button>
+          <button
+            className={`team-filter-btn ${categoriaAttiva === 'terapie' ? 'active' : ''}`}
+            onClick={() => setCategoriaAttiva(categoriaAttiva === 'terapie' ? null : 'terapie')}
+          >
+            🦴 Terapie
+          </button>
         </div>
-      </div>
-      
-      {/* Sezione Luca Quagliatini */}
-      <div className="team-card" style={{marginTop: '1rem'}}>
 
-        {/* Logo e nome */}
-        <div className="team-header">
-          <img src="/logo-performance.png" alt="Performance Center" className="team-logo" />
-          <div>
-            <p className="team-nome">{TEAM.nutrizionista2.nome}</p>
-            <p className="team-ruolo">{TEAM.nutrizionista2.ruolo}</p>
+        {/* NUTRIZIONE — Manuel Salvadori e Luca Quagliatini */}
+        {categoriaAttiva === 'nutrizione' && (
+          <div className="team-categoria">
+
+            {/* Manuel Salvadori */}
+            <div className="team-card" style={{marginTop: '1rem'}}>
+              <div className="team-header">
+                <img src="/logo-performance.png" alt="Performance Center" className="team-logo" />
+                <div>
+                  <p className="team-nome">{TEAM.nutrizionista.nome}</p>
+                  <p className="team-ruolo">{TEAM.nutrizionista.ruolo}</p>
+                </div>
+              </div>
+              <div className="team-contacts">
+                <a href={TEAM.nutrizionista.instagram_personale} target="_blank" rel="noopener noreferrer" className="team-link">📸 @dr.perf0rmance</a>
+                <a href={TEAM.nutrizionista.instagram_team} target="_blank" rel="noopener noreferrer" className="team-link">📸 @team.performance.it</a>
+                <a href={`tel:${TEAM.nutrizionista.telefono}`} className="team-link">📞 351 260 5230</a>
+                <a href={TEAM.nutrizionista.sito} target="_blank" rel="noopener noreferrer" className="team-link">🌐 manuelsalvadori.it</a>
+              </div>
+              <p className="team-coupon-text">Prenota la tua visita con il Team Performance e risparmia il 10%!</p>
+              <button className="coupon-button" onClick={generaCouponPDF}>🎟️ Scarica il tuo coupon sconto</button>
+            </div>
+
+            {/* Luca Quagliatini */}
+            <div className="team-card" style={{marginTop: '1rem'}}>
+              <div className="team-header">
+                <img src="/logo-performance.png" alt="Performance Center" className="team-logo" />
+                <div>
+                  <p className="team-nome">{TEAM.nutrizionista2.nome}</p>
+                  <p className="team-ruolo">{TEAM.nutrizionista2.ruolo}</p>
+                </div>
+              </div>
+              <div className="team-contacts">
+                <a href={TEAM.nutrizionista2.instagram_personale} target="_blank" rel="noopener noreferrer" className="team-link">📸 @dr.lucaquagliatini</a>
+                <a href={TEAM.nutrizionista2.instagram_team} target="_blank" rel="noopener noreferrer" className="team-link">📸 @team.performance.it</a>
+                <a href={`tel:${TEAM.nutrizionista2.telefono}`} className="team-link">📞 351 260 5230</a>
+                <a href={TEAM.nutrizionista2.sito} target="_blank" rel="noopener noreferrer" className="team-link">🌐 nutridoc.it</a>
+              </div>
+              <p className="team-coupon-text">Prenota la tua visita con il Team Performance e risparmia il 10%!</p>
+              <button className="coupon-button" onClick={generaCouponPDFLuca}>🎟️ Scarica il tuo coupon sconto</button>
+            </div>
+
           </div>
-        </div>
+        )}
 
-        {/* Link social e contatti */}
-        <div className="team-contacts">
-          <a href={TEAM.nutrizionista2.instagram_personale} target="_blank" rel="noopener noreferrer" className="team-link">
-            📸 @dr.lucaquagliatini
-          </a>
-          <a href={TEAM.nutrizionista2.instagram_team} target="_blank" rel="noopener noreferrer" className="team-link">
-            📸 @team.performance.it
-          </a>
-          <a href={`tel:${TEAM.nutrizionista2.telefono}`} className="team-link">
-            📞 351 260 5230
-          </a>
-          <a href={TEAM.nutrizionista2.sito} target="_blank" rel="noopener noreferrer" className="team-link">
-            🌐 nutridoc.it
-          </a>
-        </div>
+        {/* PREPARAZIONE ATLETICA — Luca Antonelli e Sara Durazzi */}
+        {categoriaAttiva === 'preparazione' && (
+          <div className="team-categoria">
 
-        {/* Frase coupon e pulsante */}
-        <p className="team-coupon-text">
-          Prenota la tua visita con il Team Performance e risparmia il 10%!
-        </p>
-        <button className="coupon-button" onClick={generaCouponPDFLuca}>
-          🎟️ Scarica il tuo coupon sconto
-        </button>
+            {/* Luca Antonelli — Preparatore Atletico */}
+            <div className="team-card" style={{marginTop: '1rem'}}>
+              <div className="team-header">
+                <img src="/logo-ateam.png" alt="A-Team Running Club" className="team-logo" />
+                <div>
+                  <p className="team-nome">{TEAM.osteopata.nome}</p>
+                  <p className="team-ruolo">Preparatore Atletico — A-Team Running Club</p>
+                </div>
+              </div>
+              <div className="team-contacts">
+                <a href={TEAM.osteopata.instagram_personale} target="_blank" rel="noopener noreferrer" className="team-link">📸 @yourosteorunner_</a>
+                <a href={TEAM.osteopata.instagram_team} target="_blank" rel="noopener noreferrer" className="team-link">📸 @a_team_runningclub</a>
+                <a href={`tel:${TEAM.osteopata.telefono}`} className="team-link">📞 388 184 6001</a>
+                <a href={TEAM.osteopata.sito} target="_blank" rel="noopener noreferrer" className="team-link">🌐 a-teamcoaching.it</a>
+              </div>
+              <p className="team-coupon-text">Prenota la tua consulenza con Luca e risparmia il 10%!</p>
+              <button className="coupon-button" onClick={generaCouponPDFAteam}>🎟️ Scarica il tuo coupon sconto</button>
+            </div>
 
-      </div>
+            {/* Sara Durazzi */}
+            <div className="team-card" style={{marginTop: '1rem'}}>
+              <div className="team-header">
+                <img src="/logo-sarad.png" alt="SaraD Coach" className="team-logo" />
+                <div>
+                  <p className="team-nome">{TEAM.coach.nome}</p>
+                  <p className="team-ruolo">{TEAM.coach.ruolo}</p>
+                </div>
+              </div>
+              <div className="team-contacts">
+                <a href={TEAM.coach.instagram_personale} target="_blank" rel="noopener noreferrer" className="team-link">📸 @sarad.coach</a>
+              </div>
+              <p className="team-coupon-text">Inizia il tuo percorso di allenamento con Sara e risparmia il 10%!</p>
+              <button className="coupon-button" onClick={generaCouponPDFSara}>🎟️ Scarica il tuo coupon sconto</button>
+            </div>
 
-      {/* Sezione Luca Antonelli — Osteopata e Preparatore Atletico A-Team */}
-      <div className="team-card" style={{marginTop: '1rem'}}>
-
-        {/* Logo e nome */}
-        <div className="team-header">
-          <img src="/logo-ateam.png" alt="A-Team Running Club" className="team-logo" />
-          <div>
-            <p className="team-nome">{TEAM.osteopata.nome}</p>
-            <p className="team-ruolo">{TEAM.osteopata.ruolo}</p>
           </div>
-        </div>
+        )}
 
-        {/* Link social e contatti */}
-        <div className="team-contacts">
-          <a href={TEAM.osteopata.instagram_personale} target="_blank" rel="noopener noreferrer" className="team-link">
-            📸 @yourosteorunner_
-          </a>
-          <a href={TEAM.osteopata.instagram_team} target="_blank" rel="noopener noreferrer" className="team-link">
-            📸 @a_team_runningclub
-          </a>
-          <a href={`tel:${TEAM.osteopata.telefono}`} className="team-link">
-            📞 388 184 6001
-          </a>
-          <a href={TEAM.osteopata.sito} target="_blank" rel="noopener noreferrer" className="team-link">
-            🌐 a-teamcoaching.it
-          </a>
-        </div>
+        {/* TERAPIE RIABILITATIVE — Luca Antonelli e Luca Squadroni */}
+        {categoriaAttiva === 'terapie' && (
+          <div className="team-categoria">
 
-        {/* Frase coupon e pulsante */}
-        <p className="team-coupon-text">
-          Prenota la tua consulenza con Luca e risparmia il 10%!
-        </p>
-        <button className="coupon-button" onClick={generaCouponPDFAteam}>
-          🎟️ Scarica il tuo coupon sconto
-        </button>
+            {/* Luca Antonelli — Osteopata */}
+            <div className="team-card" style={{marginTop: '1rem'}}>
+              <div className="team-header">
+                <img src="/logo-ateam.png" alt="A-Team Running Club" className="team-logo" />
+                <div>
+                  <p className="team-nome">{TEAM.osteopata.nome}</p>
+                  <p className="team-ruolo">Osteopata — A-Team Running Club</p>
+                </div>
+              </div>
+              <div className="team-contacts">
+                <a href={TEAM.osteopata.instagram_personale} target="_blank" rel="noopener noreferrer" className="team-link">📸 @yourosteorunner_</a>
+                <a href={TEAM.osteopata.instagram_team} target="_blank" rel="noopener noreferrer" className="team-link">📸 @a_team_runningclub</a>
+                <a href={`tel:${TEAM.osteopata.telefono}`} className="team-link">📞 388 184 6001</a>
+                <a href={TEAM.osteopata.sito} target="_blank" rel="noopener noreferrer" className="team-link">🌐 a-teamcoaching.it</a>
+              </div>
+              <p className="team-coupon-text">Prenota la tua consulenza con Luca e risparmia il 10%!</p>
+              <button className="coupon-button" onClick={generaCouponPDFAteam}>🎟️ Scarica il tuo coupon sconto</button>
+            </div>
 
-      </div>
+            {/* Luca Squadroni */}
+            <div className="team-card" style={{marginTop: '1rem'}}>
+              <div className="team-header">
+                <img src="/LucaSquadroniLogo.png" alt="Luca Squadroni Fisioterapista" className="team-logo" />
+                <div>
+                  <p className="team-nome">{TEAM.fisioterapista.nome}</p>
+                  <p className="team-ruolo">{TEAM.fisioterapista.ruolo}</p>
+                </div>
+              </div>
+              <div className="team-contacts">
+                <a href={TEAM.fisioterapista.instagram_personale} target="_blank" rel="noopener noreferrer" className="team-link">📸 @luca_squadroni</a>
+                <a href={`tel:${TEAM.fisioterapista.telefono}`} className="team-link">📞 339 431 3799</a>
+                <a href={TEAM.fisioterapista.sito} target="_blank" rel="noopener noreferrer" className="team-link">🌐 lucasquadroni.com</a>
+                <a href={TEAM.fisioterapista.app_url} target="_blank" rel="noopener noreferrer" className="team-link">📱 App Tepy — codice {TEAM.fisioterapista.app_codice}</a>
+              </div>
+              <p className="team-coupon-text">Prenota la tua seduta con Luca e risparmia il 10%!</p>
+              <button className="coupon-button" onClick={generaCouponPDFSquadroni}>🎟️ Scarica il tuo coupon sconto</button>
+            </div>
 
-            {/* Sezione Luca Squadroni — Fisioterapista Specializzato */}
-      <div className="team-card" style={{marginTop: '1rem'}}>
-
-        {/* Logo e nome */}
-        <div className="team-header">
-          <img src="/LucaSquadroniLogo.png" alt="Luca Squadroni Fisioterapista" className="team-logo" />
-          <div>
-            <p className="team-nome">{TEAM.fisioterapista.nome}</p>
-            <p className="team-ruolo">{TEAM.fisioterapista.ruolo}</p>
           </div>
-        </div>
-
-        {/* Link social e contatti */}
-        <div className="team-contacts">
-          <a href={TEAM.fisioterapista.instagram_personale} target="_blank" rel="noopener noreferrer" className="team-link">
-            📸 @luca_squadroni
-          </a>
-          <a href={`tel:${TEAM.fisioterapista.telefono}`} className="team-link">
-            📞 339 431 3799
-          </a>
-          <a href={TEAM.fisioterapista.sito} target="_blank" rel="noopener noreferrer" className="team-link">
-            🌐 lucasquadroni.com
-          </a>
-          <a href={TEAM.fisioterapista.app_url} target="_blank" rel="noopener noreferrer" className="team-link">
-            📱 App Tepy — codice {TEAM.fisioterapista.app_codice}
-          </a>
-        </div>
-
-        {/* Frase coupon e pulsante */}
-        <p className="team-coupon-text">
-          Prenota la tua seduta con Luca e risparmia il 10%!
-        </p>
-        <button className="coupon-button" onClick={generaCouponPDFSquadroni}>
-          🎟️ Scarica il tuo coupon sconto
-        </button>
+        )}
 
       </div>
-
-            {/* Sezione Sara Durazzi — Endurance Coach */}
-      <div className="team-card" style={{marginTop: '1rem'}}>
-
-        {/* Logo e nome */}
-        <div className="team-header">
-          <img src="/logo-sarad.png" alt="SaraD Coach" className="team-logo" />
-          <div>
-            <p className="team-nome">{TEAM.coach.nome}</p>
-            <p className="team-ruolo">{TEAM.coach.ruolo}</p>
-          </div>
-        </div>
-
-        {/* Link social — solo Instagram */}
-        <div className="team-contacts">
-          <a href={TEAM.coach.instagram_personale} target="_blank" rel="noopener noreferrer" className="team-link">
-            📸 @sarad.coach
-          </a>
-        </div>
-
-        {/* Frase coupon e pulsante */}
-        <p className="team-coupon-text">
-          Inizia il tuo percorso di allenamento con Sara e risparmia il 10%!
-        </p>
-        <button className="coupon-button" onClick={generaCouponPDFSara}>
-          🎟️ Scarica il tuo coupon sconto
-        </button>
-
-      </div>
-
       {/* Firma e link social dell'autore */}
       <div className="footer-signature">
         <p className="powered-by">Powered by Francesco Verga</p>
