@@ -414,3 +414,20 @@ hr { border: none; border-top: 1px solid #f0f0f0; margin: 1.5rem 0; }
   outline: none;
   border-color: #1565C0;
 }
+
+/* Input numerico per la durata uscita */
+.duration-input {
+  width: 80px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-size: 16px;
+  color: #1a1a1a;
+  background: white;
+  text-align: center;
+}
+
+.duration-input:focus {
+  outline: none;
+  border-color: #1565C0;
+}

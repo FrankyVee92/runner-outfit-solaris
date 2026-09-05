@@ -1909,8 +1909,26 @@ async function rilevaMeteomatico() {
       </section>
 
       {/* Cursori per i parametri numerici */}
-      <SliderRow icon="⏱️" label="Durata uscita" min={15} max={180} step={5}
-        value={duration} unit=" min" onChange={setDuration} />
+            {/* Input numerico per la durata — più comodo da usare su smartphone
+          rispetto alla barra scorrevole. L'utente digita direttamente i minuti.
+          min=15 e max=180 limitano i valori accettabili.
+          onChange aggiorna lo stato e salva nel localStorage */}
+      <div className="row-input">
+        <label>⏱️ Durata uscita</label>
+        <input
+          type="number"
+          className="duration-input"
+          min={15}
+          max={180}
+          step={5}
+          value={duration}
+          onChange={e => {
+            const val = Number(e.target.value);
+            if (val >= 15 && val <= 180) setDuration(val);
+          }}
+        />
+        <span className="val">min</span>
+      </div>
 
       <hr />
 
