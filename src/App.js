@@ -1913,53 +1913,31 @@ async function rilevaMeteomatico() {
         />
       </section>
 
-      {/* Cursori per i parametri numerici */}
-      {/* Input numerico per la durata — più comodo da usare su smartphone
-          rispetto alla barra scorrevole. L'utente digita direttamente i minuti.
-          min=15 e max=180 limitano i valori accettabili.
-          onChange aggiorna lo stato e salva nel localStorage */}
-       {/* Input ore e minuti — l'utente inserisce ore e minuti separatamente
-          e noi convertiamo in minuti totali con la formula (ore * 60) + minuti.
-          Più intuitivo rispetto a inserire i minuti totali direttamente. */}
+        {/* Input numerico per la durata in minuti.
+          Accanto mostriamo la conversione in ore e minuti come conferma visiva.
+          Es. l'utente scrive 90 e vede "1h 30min" */}
       <div className="row-input">
         <label>⏱️ Durata uscita</label>
-        <div className="duration-inputs">
-          <input
-            type="text"
-            inputMode="numeric"
-            className="duration-input-small"
-            placeholder="0"
-            value={Math.floor(duration / 60)}
-            onChange={e => {
-              // Prendiamo le ore inserite e convertiamo in minuti totali
-              const ore = Number(e.target.value.replace(/[^0-9]/g, '')) || 0;
-              const minuti = duration % 60;
-              const totale = (ore * 60) + minuti;
-              if (totale >= 15 && totale <= 180) setDuration(totale);
-              else if (totale < 15) setDuration(minuti);
-              else setDuration(180);
-            }}
-          />
-          <span className="duration-label">h</span>
-          <input
-            type="text"
-            inputMode="numeric"
-            className="duration-input-small"
-            placeholder="0"
-            value={duration % 60}
-            onChange={e => {
-              // Prendiamo i minuti inseriti e convertiamo in minuti totali
-              const minuti = Number(e.target.value.replace(/[^0-9]/g, '')) || 0;
-              const ore = Math.floor(duration / 60);
-              const totale = (ore * 60) + minuti;
-              if (totale >= 15 && totale <= 180) setDuration(totale);
-              else if (totale < 15) setDuration(15);
-              else setDuration(180);
-            }}
-          />
-          <span className="duration-label">min</span>
-        </div>
-        <span className="val">{duration} min</span>
+        <input
+          type="text"
+          inputMode="numeric"
+          className="duration-input"
+          value={duration}
+          onChange={e => {
+            const val = e.target.value.replace(/[^0-9]/g, '');
+            setDuration(val);
+          }}
+          onBlur={e => {
+            const num = Number(e.target.value);
+            if (!num || num < 15) setDuration(15);
+            else if (num > 180) setDuration(180);
+            else setDuration(num);
+          }}
+        />
+        <span className="val">
+          {Math.floor(duration / 60) > 0 ? `${Math.floor(duration / 60)}h ` : ''}
+          {duration % 60 > 0 ? `${duration % 60}min` : Math.floor(duration / 60) > 0 ? '' : 'min'}
+        </span>
       </div>
 
       <hr />
